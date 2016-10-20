@@ -83,7 +83,7 @@ export class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
                         checked={this.props.todo.completed}
                         onChange={this.props.onToggle}
                         />
-                    <label onDoubleClick={e => this.handleEdit()}>
+                    <label className="ms-font-xl" onDoubleClick={e => this.handleEdit()}>
                         {this.props.todo.title}
                     </label>
                     <button className="destroy" onClick={this.props.onDestroy} />

@@ -144,10 +144,10 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
         return (
             <div>
                 <header className="header">
-                    <h1>todos</h1>
+                    <h1 className="ms-font-su">todos</h1>
                     <input
                         ref="newField"
-                        className="new-todo"
+                        className="new-todo ms-font-xl"
                         placeholder="What needs to be done?"
                         onKeyDown={e => this.handleNewTodoKeyDown(e)}
                         autoFocus={true}

@@ -1,0 +1,60 @@
+body {
+    background-color: #004578;
+}
+
+.todoapp h1 {
+    color: #c7e0f4;
+}
+
+.info {
+    text-shadow: none;
+    color: #c7e0f4;
+}
+
+.ms-font-xl {
+    font-weight: 400;
+}
+
+.todo-list li .toggle:after,
+.todo-list li .toggle:checked::after,
+input[type=checkbox].toggle-all::before {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-family: 'FabricMDL2Icons';
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    content: '\E73A';
+    padding: 10px 20px 10px 20px;
+    font-size: 19pt;
+}
+
+.todo-list li .toggle:after {
+    content: '\E739';
+    padding: 10px 20px 10px 12px;
+    color: rgba(0, 0, 0, 0.1);
+}
+
+.todo-list li .toggle:checked::after {
+    padding: 10px 20px 10px 12px;
+    color: #737373;
+}
+
+/* Remove the safari hack on ToDoMVC */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .toggle-all {
+         -webkit-transform: rotate(90deg);
+        transform: none;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+button.clear-completed {
+    color: #e81123;
+}
+
+.filters li a.selected {
+    border-color: #2b88d8;
+}

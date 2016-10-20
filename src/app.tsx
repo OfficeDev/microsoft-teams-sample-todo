@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom';
 import 'todomvc-common/base.css';
 import 'todomvc-app-css/index.css';
 import 'todomvc-common/base.js';
+import 'office-ui-fabric-core/dist/css/fabric.min.css';
+import './app.css';
 
 import { TodoApp } from './todoApp';
 import { TodoModel } from './core';

@@ -21,7 +21,7 @@ export class TodoFooter extends React.Component<ITodoFooterProps, {}> {
 
         const nowShowing = this.props.nowShowing;
         return (
-            <footer className="footer">
+            <footer className="footer ms-font-m">
                 <span className="todo-count">
                     <strong>{this.props.count}</strong> {activeTodoWord}left
                 </span>
