@@ -2,6 +2,7 @@ import { ITodo } from '../core';
 import { Authenticator, IToken } from '@microsoft/office-js-helpers';
 
 interface ITodoService {
+    authenticator: Authenticator;
     login: () => Promise<IToken>;
     get: () => Promise<ITodo[]>;
     create: (todo: ITodo) => Promise<ITodo>;
@@ -9,19 +10,21 @@ interface ITodoService {
     markAsComplete: (todo: ITodo) => Promise<ITodo>;
 }
 
-export class GraphService implements ITodoService {
+export class OutlookTasks implements ITodoService {
     private _token: IToken;
     private _retryCounter = 0;
     private _baseUrl: string = 'https://outlook.office.com/api/v2.0';
+    authenticator: Authenticator;
 
-    constructor(public authenticator: Authenticator) {
-        authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
+    constructor() {
+        this.authenticator = new Authenticator();
+        this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
             scope: 'https://outlook.office.com/tasks.readwrite'
         });
     }
 
     login(): Promise<IToken> {
-        return this.authenticator.authenticate('microsoft')
+        return this.authenticator.authenticate('Microsoft')
             .then(token => this._token = token)
             .catch(error => {
                 console.error(error);
@@ -41,7 +44,7 @@ export class GraphService implements ITodoService {
                 }
             })
             .then(res => res.json())
-            .then(res => res.value.map(this._convertToDo))
+            .then(res => res.value.map(this._convertTask))
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to get your todos');
@@ -66,7 +69,7 @@ export class GraphService implements ITodoService {
                 }
             })
             .then(res => res.json())
-            .then(this._convertToDo)
+            .then(this._convertTask)
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to create your todo');
@@ -105,7 +108,7 @@ export class GraphService implements ITodoService {
                 }
             })
             .then(res => res.json())
-            .then(this._convertToDo)
+            .then(this._convertTask)
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to mark your todo as complete');
@@ -131,7 +134,7 @@ export class GraphService implements ITodoService {
         }
     }
 
-    private _convertToDo(task: any): ITodo {
+    private _convertTask(task: any): ITodo {
         return {
             id: task.Id,
             title: task.Subject,

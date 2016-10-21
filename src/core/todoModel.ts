@@ -28,7 +28,7 @@ export class TodoModel implements ITodoModel {
     }
 
     public addTodo(title: string) {
-        this.todos = this.todos.concat({
+        this.todos = this.todos.concat(<ITodo>{
             id: Utils.uuid(),
             title: title,
             completed: false
