@@ -1,5 +1,6 @@
 import { Utils } from './utils';
 import { ITodo, ITodoModel } from './interfaces';
+import { OutlookTasks } from '../services';
 
 // Generic 'model' object. You can use whatever
 // framework you want. For this application it
@@ -11,10 +12,16 @@ export class TodoModel implements ITodoModel {
     public key: string;
     public todos: Array<ITodo>;
     public onChanges: Array<any>;
+    private _outlookTasks: OutlookTasks;
 
     constructor(key) {
         this.key = key;
-        this.todos = Utils.store(key);
+        this._outlookTasks = new OutlookTasks();
+        this.todos = [];
+        this._outlookTasks.get().then(tasks => {
+            this.todos = tasks;
+            this.inform();
+        })
         this.onChanges = [];
     }
 
@@ -23,18 +30,20 @@ export class TodoModel implements ITodoModel {
     }
 
     public inform() {
-        Utils.store(this.key, this.todos);
         this.onChanges.forEach(function (cb) { cb(); });
     }
 
     public addTodo(title: string) {
-        this.todos = this.todos.concat({
+        let todo: ITodo = {
             id: Utils.uuid(),
             title: title,
             completed: false
-        });
+        };
 
-        this.inform();
+        this._outlookTasks.create(todo).then(todo => {
+            this.todos = this.todos.concat(todo);
+            this.inform();
+        });
     }
 
     public toggleAll(checked: Boolean) {
@@ -43,7 +52,9 @@ export class TodoModel implements ITodoModel {
         // we use map(), filter() and reduce() everywhere instead of mutating the
         // array or todo items themselves.
         this.todos = this.todos.map<ITodo>((todo: ITodo) => {
-            return Utils.extend({}, todo, { completed: checked });
+            var update = Utils.extend({}, todo, { completed: checked });
+            this._outlookTasks.markAsComplete(update);
+            return update
         });
 
         this.inform();
@@ -52,19 +63,25 @@ export class TodoModel implements ITodoModel {
     public toggle(todoToToggle: ITodo) {
         this.todos = this.todos.map<ITodo>((todo: ITodo) => {
             return todo !== todoToToggle ?
-                todo :
-                Utils.extend({}, todo, { completed: !todo.completed });
+                todo : (() => {
+                    this._outlookTasks.markAsComplete(todo);
+                    return Utils.extend({}, todo, { completed: !todo.completed });
+                })();
         });
 
         this.inform();
     }
 
     public destroy(todo: ITodo) {
-        this.todos = this.todos.filter(function (candidate) {
-            return candidate !== todo;
-        });
+        this._outlookTasks.delete(todo).then(result => {
+            if (result) {
+                this.todos = this.todos.filter(function (candidate) {
+                    return candidate !== todo;
+                });
+            }
 
-        this.inform();
+            this.inform();
+        });
     }
 
     public save(todoToSave: ITodo, text: string) {
@@ -76,7 +93,10 @@ export class TodoModel implements ITodoModel {
     }
 
     public clearCompleted() {
-        this.todos = this.todos.filter(function (todo) {
+        this.todos = this.todos.filter(todo => {
+            if (todo.completed) {
+                this._outlookTasks.delete(todo);
+            }
             return !todo.completed;
         });
 
