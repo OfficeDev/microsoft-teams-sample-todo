@@ -18,7 +18,7 @@ export class OutlookTasks implements ITodoService {
 
     constructor() {
         this.authenticator = new Authenticator();
-        this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
+        this.authenticator.endpoints.registerMicrosoftAuth('<client id>', {
             scope: 'https://outlook.office.com/tasks.readwrite'
         });
     }
@@ -65,7 +65,9 @@ export class OutlookTasks implements ITodoService {
                     Importance: todo.importance == null ? 'normal' : todo.importance
                 }),
                 headers: {
-                    Authorization: `Bearer ${this._token.access_token}`
+                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
@@ -85,7 +87,9 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "DELETE",
                 headers: {
-                    Authorization: `Bearer ${this._token.access_token}`
+                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(res => res.status === 204)
@@ -104,7 +108,9 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${this._token.access_token}`
+                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
@@ -139,7 +145,7 @@ export class OutlookTasks implements ITodoService {
             id: task.Id,
             title: task.Subject,
             completed: task.Status === 'Completed',
-            importance: task.Importance.toLowerCase()
+            importance: task.Importance && task.Importance.toLowerCase()
         } as ITodo;
     }
 }

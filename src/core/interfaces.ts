@@ -2,7 +2,7 @@ export interface ITodo {
     id: string,
     title: string,
     completed: boolean,
-    importance: string;
+    importance?: string;
 }
 
 export interface ITodoItemProps {
