@@ -3,7 +3,7 @@
     "manifestVersion": "0.2",
     "id": "com.example.microsoftteamstabs.todo",
     "version": "0.2",
-    "name": "ToDo",
+    "name": "React • TodoMVC",
     "developer": {
         "name": "Contoso",
         "websiteUrl": "http://www.contoso.com",
@@ -11,8 +11,8 @@
         "termsOfUseUrl": "http://www.contoso.com/termsofuse"
     },
     "description": {
-        "short": "Outlook ToDo",
-        "full": "Manage your Outlook ToDos using ToDo MVC React"
+        "short": "React • TodoMVC",
+        "full": "Manage your Outlook Todos using TodoMVC React"
     },
     "icons": {
         "44": "todo44.png",
