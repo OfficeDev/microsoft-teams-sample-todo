@@ -18,7 +18,7 @@ export class OutlookTasks implements ITodoService {
 
     constructor() {
         this.authenticator = new Authenticator();
-        this.authenticator.endpoints.registerMicrosoftAuth('<client id>', {
+        this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
             scope: 'https://outlook.office.com/tasks.readwrite'
         });
     }

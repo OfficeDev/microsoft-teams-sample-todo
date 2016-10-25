@@ -5,7 +5,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        'app': './src/app.tsx'
+        'app': './src/app.tsx',
+        'config': './src/config.ts'
     },
 
     output: {
@@ -44,14 +45,18 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: ['vendor', 'app'].reverse()
+        new HtmlWebpackPlugin({
+            title: 'React • TodoMVC',
+            filename: 'index.html',
+            template: path.resolve('index.html'),
+            chunks: ['app']
         }),
 
         new HtmlWebpackPlugin({
-            title: 'ToDo MVC',
-            filename: 'index.html',
-            template: path.resolve('index.html')
+            title: 'Config • TodoMVC',
+            filename: 'config.html',
+            template: path.resolve('config.html'),
+            chunks: ['config']
         }),
 
         new ExtractTextPlugin('[name].css'),

@@ -1,0 +1,28 @@
+{
+    "$schema": "https://teamspacewusprodms.blob.core.windows.net/tabframework/0.2/tab-manifest-schema.json",
+    "manifestVersion": "0.2",
+    "id": "com.example.microsoftteamstabs.todo",
+    "version": "0.2",
+    "name": "ToDo",
+    "developer": {
+        "name": "Contoso",
+        "websiteUrl": "http://www.contoso.com",
+        "privacyUrl": "http://www.contoso.com/privacy",
+        "termsOfUseUrl": "http://www.contoso.com/termsofuse"
+    },
+    "description": {
+        "short": "Outlook ToDo",
+        "full": "Manage your Outlook ToDos using ToDo MVC React"
+    },
+    "icons": {
+        "44": "todo44.png",
+        "88": "todo88.png"
+    },
+    "accentColor": "#004578",
+    "configUrl": "https://localhost:3000/config.html",
+    "canUpdateConfig": true,
+    "needsIdentity": true,
+    "validDomains": [
+        "*.login.microsoftonline.com"
+    ]
+}
