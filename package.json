@@ -26,6 +26,7 @@
     "todomvc-app-css": "^2.0.6",
     "todomvc-common": "^1.0.2",
     "office-ui-fabric-core": "^4.1.0",
+    "office-ui-fabric-js": "^1.1.0",
     "core-js": "^2.4.1",
     "whatwg-fetch": "^1.0.0",
     "@microsoft/office-js-helpers": "^0.1.8"
