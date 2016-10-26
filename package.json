@@ -14,7 +14,7 @@
   "homepage": "https://github.com/OfficeDev/microsoft-teams-sample-todo#readme",
   "private": true,
   "scripts": {
-    "build": "webpack --config ./webpack.config.js --colors --display-modules --progress",
+    "build": "rimraf dist && webpack --config config/webpack.prod.js --colors --display-modules --progress",
     "start": "webpack-dev-server --port 3000 --config config/webpack.dev.js --colors --display-modules --progress --open",
     "postinstall": "typings install"
   },
@@ -32,6 +32,7 @@
     "@microsoft/office-js-helpers": "^0.1.8"
   },
   "devDependencies": {
+    "rimraf": "^2.5.4",
     "typescript": "^2.0.3",
     "typings": "^1.4.0",
     "ts-loader": "^0.9.5",

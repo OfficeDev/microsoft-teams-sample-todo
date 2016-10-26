@@ -1,5 +1,5 @@
 import { ITodo } from '../core';
-import { Authenticator, IToken } from '@microsoft/office-js-helpers';
+import { Authenticator, IToken } from '../auth';
 
 interface ITodoService {
     authenticator: Authenticator;
