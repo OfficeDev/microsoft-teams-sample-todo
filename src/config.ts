@@ -1,15 +1,26 @@
 ///<reference path="./MicrosoftTeams.d.ts"/>
+declare var OfficeHelpers: any;
 
-((microsoftTeams) => {
+(() => {
     "use strict";
 
     if (!microsoftTeams) return;
-
     microsoftTeams.initialize();
-    microsoftTeams.settings.setValidityState(true);
-    microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
-        microsoftTeams.settings.setSettings({ contentUrl: "/index.html", suggestedTabName: "React • TodoMVC", websiteUrl: "https://localhost:3000" });
-        saveEvent.notifySuccess();
+
+    var authenticator = new OfficeHelpers.Authenticator();
+    authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
+        scope: 'https://outlook.office.com/tasks.readwrite'
     });
 
-})((window as any).microsoftTeams);
+    authenticator.authenticate('Microsoft')
+        .then(() => microsoftTeams.settings.setValidityState(true));
+
+    microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
+        microsoftTeams.settings.setSettings({
+            contentUrl: "https://localhost:3000/index.html",
+            suggestedDisplayName: "My Tasks",
+            websiteUrl: "https://localhost:3000/index.html"
+        });
+        saveEvent.notifySuccess();
+    });
+})();

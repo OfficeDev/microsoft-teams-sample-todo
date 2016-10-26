@@ -3,16 +3,16 @@
     "manifestVersion": "0.2",
     "id": "com.example.microsoftteamstabs.todo",
     "version": "0.2",
-    "name": "React • TodoMVC",
+    "name": "My Tasks",
     "developer": {
         "name": "Contoso",
-        "websiteUrl": "http://www.contoso.com",
-        "privacyUrl": "http://www.contoso.com/privacy",
-        "termsOfUseUrl": "http://www.contoso.com/termsofuse"
+        "websiteUrl": "https://www.contoso.com",
+        "privacyUrl": "https://www.contoso.com/privacy",
+        "termsOfUseUrl": "https://www.contoso.com/termsofuse"
     },
     "description": {
-        "short": "React • TodoMVC",
-        "full": "Manage your Outlook Todos using TodoMVC React"
+        "short": "Create and manange your tasks.",
+        "full": "Create and manange your tasks outlook tasks using React • Todo."
     },
     "icons": {
         "44": "todo44.png",

@@ -2,9 +2,8 @@ body {
     background-color: #004578;
 }
 
-.config h1 {
-    margin-top: 100px;
-    margin-bottom: 30px;
+body.config {
+    background-color: #FFFFFF;
 }
 
 .config p {
@@ -18,14 +17,12 @@ body {
 
 .config .ms-Persona-details p:first-child {
     margin-bottom: 15px;
+    opacity: 0.6;
 }
 
 .config .ms-Persona-details p:last-child {
-    margin-top: 5px;
-}
-
-.config .info p {
-    margin-bottom: 10px;
+    margin-top: 8px;
+    opacity: 0.6;
 }
 
 .todoapp h1 {
@@ -83,4 +80,10 @@ button.clear-completed {
 
 .filters li a.selected {
     border-color: #2b88d8;
+}
+
+#debug {
+    word-break: break-all;
+    width: 100vw;
+    white-space: pre-line;
 }
