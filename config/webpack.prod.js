@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 
