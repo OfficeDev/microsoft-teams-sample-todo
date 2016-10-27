@@ -21,7 +21,7 @@
     "accentColor": "#004578",
     "configUrl": "https://localhost:3000/config.html",
     "canUpdateConfig": true,
-    "needsIdentity": true,
+    "needsIdentity": false,
     "validDomains": [
         "*.login.microsoftonline.com"
     ]

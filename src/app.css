@@ -1,11 +1,11 @@
 body {
     background-color: #004578;
-    margin: 0;
-    padding: 0;
 }
 
 body.config {
     background-color: #FFFFFF;
+    margin: 0;
+    padding: 0;
 }
 
 .config p {
@@ -25,6 +25,10 @@ body.config {
 .config .ms-Persona-details p:last-child {
     margin-top: 8px;
     opacity: 0.6;
+}
+
+.config .ms-Button {
+    margin-top: 20px;
 }
 
 .todoapp h1 {

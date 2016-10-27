@@ -5,6 +5,12 @@ export interface ITodo {
     importance?: string;
 }
 
+export interface IProfile {
+    displayName: "Bhargav Krishna",
+    mail: "Bhargav.Krishna@microsoft.com",
+    thumbnail: string;
+}
+
 export interface ITodoItemProps {
     key: string,
     todo: ITodo;

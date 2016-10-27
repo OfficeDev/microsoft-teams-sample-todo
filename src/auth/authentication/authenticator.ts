@@ -198,6 +198,8 @@ export class Authenticator {
         if (Authenticator._hasDialogAPI == null) {
             try {
                 Authenticator._hasDialogAPI = window.hasOwnProperty('microsoftTeams');
+                microsoftTeams.initialize();
+                Authenticator._hasDialogAPI = false;
             }
             catch (e) {
                 Authenticator._hasDialogAPI = false;
@@ -261,16 +263,6 @@ export class Authenticator {
         let windowSize = this._determineDialogSize();
 
         return new Promise<IToken>((resolve, reject) => {
-            microsoftTeams.authentication.authenticate({
-                url: params.url,
-                width: windowSize.toPixels().width,
-                height: windowSize.toPixels().height,
-                successCallback: successCallback,
-                failureCallback: exception => {
-                    return reject(new OAuthError('Error while launching dialog: ' + JSON.stringify(exception)));
-                }
-            });
-
             var successCallback = message => {
                 try {
                     if (message == null || message === '') {
@@ -296,6 +288,16 @@ export class Authenticator {
                     return reject(new OAuthError('Error while parsing response: ' + JSON.stringify(exception)));
                 }
             };
+
+            microsoftTeams.authentication.authenticate({
+                url: params.url,
+                width: windowSize.toPixels().width,
+                height: windowSize.toPixels().height,
+                successCallback: successCallback,
+                failureCallback: exception => {
+                    return reject(new OAuthError('Error while launching dialog: ' + JSON.stringify(exception)));
+                }
+            });
         });
     };
 

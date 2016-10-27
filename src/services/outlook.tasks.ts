@@ -1,4 +1,4 @@
-import { ITodo } from '../core';
+import { ITodo, IProfile } from '../core';
 import { Authenticator, IToken } from '../auth';
 
 interface ITodoService {
@@ -11,25 +11,73 @@ interface ITodoService {
 }
 
 export class OutlookTasks implements ITodoService {
-    private _token: IToken;
+    token: IToken;
     private _retryCounter = 0;
     private _baseUrl: string = 'https://outlook.office.com/api/v2.0';
+    private _graphUrl: string = 'https://graph.microsoft.com/v1.0';
+
     authenticator: Authenticator;
 
-    constructor() {
+    constructor(scope?: string) {
         this.authenticator = new Authenticator();
         this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
-            scope: 'https://outlook.office.com/tasks.readwrite'
+            scope: scope,
+            redirectUrl: 'https://localhost:3000/config.html'
         });
+
+        this.token = this.authenticator.tokens.get('Microsoft');
     }
 
     login(): Promise<IToken> {
         return this.authenticator.authenticate('Microsoft')
-            .then(token => this._token = token)
+            .then(token => this.token = token)
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to login using your Microsoft Account');
             });
+    }
+
+    logout() {
+        this.authenticator.tokens.clear();
+    }
+
+    profile(): Promise<IProfile> {
+        return this._isAuthenticated().then(token => this._getProfile());
+    }
+
+    private _getProfile(): Promise<IProfile> {
+        var profile = {} as IProfile;
+        return Promise.all([
+            this._getUserInfo(),
+            this._getUserPhoto()
+        ])
+            .then(response => {
+                var [userInfo, userPhoto] = response;
+                profile = userInfo;
+                profile.thumbnail = userPhoto;
+                return profile;
+            });
+    }
+
+    private _getUserInfo(): Promise<any> {
+        return fetch(`${this._graphUrl}/me`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.token.access_token}`
+                }
+            })
+            .then(res => res.json());
+    }
+
+    private _getUserPhoto(): Promise<any> {
+        return fetch(`${this._graphUrl}/me/photo/$value`,
+            {
+                headers: {
+                    Authorization: `Bearer ${this.token.access_token}`
+                }
+            })
+            .then(res => res.blob())
+            .then(blob => window.URL.createObjectURL(blob))
     }
 
     get(): Promise<ITodo[]> {
@@ -40,7 +88,7 @@ export class OutlookTasks implements ITodoService {
         return fetch(`${this._baseUrl}/me/tasks`,
             {
                 headers: {
-                    Authorization: `Bearer ${this._token.access_token}`
+                    Authorization: `Bearer ${this.token.access_token}`
                 }
             })
             .then(res => res.json())
@@ -65,7 +113,7 @@ export class OutlookTasks implements ITodoService {
                     Importance: todo.importance == null ? 'normal' : todo.importance
                 }),
                 headers: {
-                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Authorization': `Bearer ${this.token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -87,7 +135,7 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "DELETE",
                 headers: {
-                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Authorization': `Bearer ${this.token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -108,7 +156,7 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${this._token.access_token}`,
+                    'Authorization': `Bearer ${this.token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -122,7 +170,7 @@ export class OutlookTasks implements ITodoService {
     }
 
     private _isAuthenticated(): Promise<IToken> {
-        if (this._token == null) {
+        if (this.token == null) {
             if (this._retryCounter < 3) {
                 return this.login()
                     .catch(e => {
@@ -136,7 +184,7 @@ export class OutlookTasks implements ITodoService {
             }
         }
         else {
-            return Promise.resolve(this._token);
+            return Promise.resolve(this.token);
         }
     }
 

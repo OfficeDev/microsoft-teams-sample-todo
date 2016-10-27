@@ -16,7 +16,7 @@ export class TodoModel implements ITodoModel {
 
     constructor(key) {
         this.key = key;
-        this._outlookTasks = new OutlookTasks();
+        this._outlookTasks = new OutlookTasks('https://outlook.office.com/tasks.readwrite');
         this.todos = [];
         this._outlookTasks.get().then(tasks => {
             this.todos = tasks;
