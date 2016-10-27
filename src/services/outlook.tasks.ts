@@ -1,5 +1,5 @@
 import { ITodo, IProfile } from '../core';
-import { Authenticator, IToken } from '../auth';
+import { Authenticator, Storage, IToken, IEndpoint } from '../auth';
 
 interface ITodoService {
     authenticator: Authenticator;
@@ -11,26 +11,41 @@ interface ITodoService {
 }
 
 export class OutlookTasks implements ITodoService {
-    token: IToken;
+    graphToken: IToken;
+    tasksToken: IToken;
     private _retryCounter = 0;
     private _baseUrl: string = 'https://outlook.office.com/api/v2.0';
     private _graphUrl: string = 'https://graph.microsoft.com/v1.0';
 
     authenticator: Authenticator;
+    storage: Storage<IProfile>;
 
     constructor(scope?: string) {
         this.authenticator = new Authenticator();
+        this.storage = new Storage<IProfile>('GraphProfile');
         this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
-            scope: scope,
             redirectUrl: 'https://localhost:3000/config.html'
         });
 
-        this.token = this.authenticator.tokens.get('Microsoft');
+        this.authenticator.endpoints.add('Tasks', {
+            clientId: '73d044ea-4ae0-4bd8-b26c-7c2f924410a2',
+            baseUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0',
+            redirectUrl: 'https://localhost:3000/config.html',
+            authorizeUrl: '/authorize',
+            responseType: 'token',
+            scope: 'https://outlook.office.com/tasks.readwrite',
+            nonce: true,
+            state: true,
+            extraParameters: '&response_mode=fragment',
+        } as IEndpoint)
+
+        this.graphToken = this.authenticator.tokens.get('Microsoft');
     }
 
-    login(): Promise<IToken> {
-        return this.authenticator.authenticate('Microsoft')
-            .then(token => this.token = token)
+    login(graph?: boolean): Promise<IToken> {
+        var scope = graph ? 'Microsoft' : 'Tasks';
+        return this.authenticator.authenticate('Tasks')
+            .then(token => this.tasksToken = token)
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to login using your Microsoft Account');
@@ -39,10 +54,15 @@ export class OutlookTasks implements ITodoService {
 
     logout() {
         this.authenticator.tokens.clear();
+        this.storage.clear();
     }
 
     profile(): Promise<IProfile> {
-        return this._isAuthenticated().then(token => this._getProfile());
+        var profile = this.storage.get('Profile');
+        if (profile) return Promise.resolve(profile);
+        return this._isAuthenticated()
+            .then(token => this._getProfile())
+            .then(profile => this.storage.add('Profile', profile));
     }
 
     private _getProfile(): Promise<IProfile> {
@@ -63,7 +83,7 @@ export class OutlookTasks implements ITodoService {
         return fetch(`${this._graphUrl}/me`,
             {
                 headers: {
-                    Authorization: `Bearer ${this.token.access_token}`
+                    Authorization: `Bearer ${this.graphToken.access_token}`
                 }
             })
             .then(res => res.json());
@@ -73,7 +93,7 @@ export class OutlookTasks implements ITodoService {
         return fetch(`${this._graphUrl}/me/photo/$value`,
             {
                 headers: {
-                    Authorization: `Bearer ${this.token.access_token}`
+                    Authorization: `Bearer ${this.graphToken.access_token}`
                 }
             })
             .then(res => res.blob())
@@ -88,7 +108,7 @@ export class OutlookTasks implements ITodoService {
         return fetch(`${this._baseUrl}/me/tasks`,
             {
                 headers: {
-                    Authorization: `Bearer ${this.token.access_token}`
+                    Authorization: `Bearer ${this.tasksToken.access_token}`
                 }
             })
             .then(res => res.json())
@@ -113,7 +133,7 @@ export class OutlookTasks implements ITodoService {
                     Importance: todo.importance == null ? 'normal' : todo.importance
                 }),
                 headers: {
-                    'Authorization': `Bearer ${this.token.access_token}`,
+                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -135,7 +155,7 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "DELETE",
                 headers: {
-                    'Authorization': `Bearer ${this.token.access_token}`,
+                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -156,7 +176,7 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${this.token.access_token}`,
+                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
@@ -169,13 +189,14 @@ export class OutlookTasks implements ITodoService {
             });
     }
 
-    private _isAuthenticated(): Promise<IToken> {
-        if (this.token == null) {
+    private _isAuthenticated(graph?: boolean): Promise<IToken> {
+        var token = graph ? this.graphToken : this.tasksToken;
+        if (token == null) {
             if (this._retryCounter < 3) {
                 return this.login()
                     .catch(e => {
                         console.error(`Login failed... retrying... ${++this._retryCounter}`);
-                        return this._isAuthenticated();
+                        return this._isAuthenticated(graph);
                     });
             }
             else {
@@ -184,7 +205,7 @@ export class OutlookTasks implements ITodoService {
             }
         }
         else {
-            return Promise.resolve(this.token);
+            return Promise.resolve(token);
         }
     }
 
