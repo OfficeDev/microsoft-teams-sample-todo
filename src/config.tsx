@@ -19,7 +19,7 @@ class Config extends React.Component<any, any> {
         };
 
         this.outlookTasks = new OutlookTasks();
-        var token = this.outlookTasks.token;
+        var token = this.outlookTasks.graphToken;
         if (token) this.login();
     }
 
@@ -60,7 +60,7 @@ class Config extends React.Component<any, any> {
     }
 
     login() {
-        return this.outlookTasks.login()
+        return this.outlookTasks.login(true)
             .then(token => this.outlookTasks.profile())
             .then(profile => this.setState({
                 loggedIn: true,
