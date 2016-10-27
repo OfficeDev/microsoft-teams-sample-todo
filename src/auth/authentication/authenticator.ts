@@ -65,6 +65,11 @@ export class Authenticator {
      */
     authenticate(provider: string, force: boolean = false): Promise<IToken> {
         let token = this.tokens.get(provider);
+        try {
+            microsoftTeams.initialize();
+        }
+        catch (e) {
+        }
 
         if (token != null) {
             if (token.expires_at != null) {
@@ -176,6 +181,11 @@ export class Authenticator {
                 return false;
             }
 
+            try {
+                microsoftTeams.initialize();
+            }
+            catch (e) {
+            }
             microsoftTeams.authentication.notifySuccess(location.href);
             return true;
         }
@@ -198,8 +208,6 @@ export class Authenticator {
         if (Authenticator._hasDialogAPI == null) {
             try {
                 Authenticator._hasDialogAPI = window.hasOwnProperty('microsoftTeams');
-                microsoftTeams.initialize();
-                Authenticator._hasDialogAPI = false;
             }
             catch (e) {
                 Authenticator._hasDialogAPI = false;

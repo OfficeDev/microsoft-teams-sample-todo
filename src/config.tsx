@@ -83,9 +83,9 @@ class Config extends React.Component<any, any> {
         microsoftTeams.settings.setValidityState(true);
         microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
             microsoftTeams.settings.setSettings({
-                contentUrl: "https://localhost:3000/index.html",
+                contentUrl: `${location.origin}/index.html`,
                 suggestedDisplayName: "My Tasks",
-                websiteUrl: "https://localhost:3000/index.html"
+                websiteUrl: `${location.origin}/index.html`
             });
             saveEvent.notifySuccess();
         });
