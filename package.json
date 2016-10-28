@@ -1,0 +1,47 @@
+{
+  "name": "microsoft-teams-sample-todo",
+  "version": "1.0.0",
+  "author": {
+    "name": "Microsoft"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OfficeDev/microsoft-teams-sample-todo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OfficeDev/microsoft-teams-sample-todo/issues"
+  },
+  "homepage": "https://github.com/OfficeDev/microsoft-teams-sample-todo#readme",
+  "private": true,
+  "scripts": {
+    "build": "rimraf dist && webpack --config config/webpack.prod.js --colors --display-modules --progress",
+    "start": "webpack-dev-server --port 3000 --config config/webpack.dev.js --colors --display-modules --progress --open",
+    "postinstall": "typings install"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "director": "^1.2.8",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "todomvc-app-css": "^2.0.6",
+    "todomvc-common": "^1.0.2",
+    "office-ui-fabric-core": "^4.1.0",
+    "office-ui-fabric-js": "^1.1.0",
+    "core-js": "^2.4.1",
+    "whatwg-fetch": "^1.0.0",
+    "@microsoft/office-js-helpers": "^0.2.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.5.4",
+    "typescript": "^2.0.3",
+    "typings": "^1.4.0",
+    "ts-loader": "^0.9.5",
+    "css-loader": "^0.25.0",
+    "source-map-loader": "^0.1.5",
+    "html-webpack-plugin": "^2.22.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-merge": "^0.15.0"
+  }
+}
