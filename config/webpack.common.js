@@ -10,11 +10,6 @@ module.exports = {
         'vendor': './src/vendor.ts'
     },
 
-    output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, "dist")
-    },
-
     // Enable sourcemaps for debugging webpack's output.
     devtool: 'source-map',
 

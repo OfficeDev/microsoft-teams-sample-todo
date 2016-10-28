@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 
@@ -11,7 +10,7 @@ module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve('dist'),
         filename: '[name].js',
         chunkFilename: '[id].chunk.js',
         sourceMapFilename: '[name].map'

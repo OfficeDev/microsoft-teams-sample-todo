@@ -19,7 +19,7 @@ class Config extends React.Component<any, any> {
         };
 
         this.outlookTasks = new OutlookTasks();
-        var token = this.outlookTasks.token;
+        var token = this.outlookTasks.graphToken;
         if (token) this.login();
     }
 
@@ -60,7 +60,7 @@ class Config extends React.Component<any, any> {
     }
 
     login() {
-        return this.outlookTasks.login()
+        return this.outlookTasks.login(true)
             .then(token => this.outlookTasks.profile())
             .then(profile => this.setState({
                 loggedIn: true,
@@ -83,9 +83,9 @@ class Config extends React.Component<any, any> {
         microsoftTeams.settings.setValidityState(true);
         microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
             microsoftTeams.settings.setSettings({
-                contentUrl: "https://localhost:3000/index.html",
+                contentUrl: `${location.origin}/index.html`,
                 suggestedDisplayName: "My Tasks",
-                websiteUrl: "https://localhost:3000/index.html"
+                websiteUrl: `${location.origin}/index.html`
             });
             saveEvent.notifySuccess();
         });

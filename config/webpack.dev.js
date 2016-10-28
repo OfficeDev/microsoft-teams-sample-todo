@@ -5,7 +5,7 @@ var commonConfig = require('./webpack.common.js');
 
 module.exports = webpackMerge(commonConfig, {
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve('dist'),
         filename: '[name].[hash].js',
         chunkFilename: '[id].chunk.js',
         sourceMapFilename: '[name].[hash].map'

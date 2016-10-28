@@ -20,17 +20,17 @@ export class OutlookTasks implements ITodoService {
     authenticator: Authenticator;
     storage: Storage<IProfile>;
 
-    constructor(scope?: string) {
+    constructor() {
         this.authenticator = new Authenticator();
         this.storage = new Storage<IProfile>('GraphProfile');
         this.authenticator.endpoints.registerMicrosoftAuth('73d044ea-4ae0-4bd8-b26c-7c2f924410a2', {
-            redirectUrl: 'https://localhost:3000/config.html'
+            redirectUrl: `${location.origin}/config.html`
         });
 
         this.authenticator.endpoints.add('Tasks', {
             clientId: '73d044ea-4ae0-4bd8-b26c-7c2f924410a2',
             baseUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0',
-            redirectUrl: 'https://localhost:3000/config.html',
+            redirectUrl: `${location.origin}/config.html`,
             authorizeUrl: '/authorize',
             responseType: 'token',
             scope: 'https://outlook.office.com/tasks.readwrite',
@@ -44,8 +44,8 @@ export class OutlookTasks implements ITodoService {
 
     login(graph?: boolean): Promise<IToken> {
         var scope = graph ? 'Microsoft' : 'Tasks';
-        return this.authenticator.authenticate('Tasks')
-            .then(token => this.tasksToken = token)
+        return this.authenticator.authenticate(scope)
+            .then(token => graph ? this.graphToken = token : this.tasksToken = token)
             .catch(error => {
                 console.error(error);
                 throw new Error('Failed to login using your Microsoft Account');
@@ -60,7 +60,7 @@ export class OutlookTasks implements ITodoService {
     profile(): Promise<IProfile> {
         var profile = this.storage.get('Profile');
         if (profile) return Promise.resolve(profile);
-        return this._isAuthenticated()
+        return this._isAuthenticated(true)
             .then(token => this._getProfile())
             .then(profile => this.storage.add('Profile', profile));
     }
