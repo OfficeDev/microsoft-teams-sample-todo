@@ -53,8 +53,8 @@ export class TodoModel implements ITodoModel {
         // array or todo items themselves.
         this.todos = this.todos.map<ITodo>((todo: ITodo) => {
             var update = Utils.extend({}, todo, { completed: checked });
-            this._outlookTasks.markAsComplete(update);
-            return update
+            this._outlookTasks.update(update);
+            return update;
         });
 
         this.inform();
@@ -64,8 +64,9 @@ export class TodoModel implements ITodoModel {
         this.todos = this.todos.map<ITodo>((todo: ITodo) => {
             return todo !== todoToToggle ?
                 todo : (() => {
-                    this._outlookTasks.markAsComplete(todo);
-                    return Utils.extend({}, todo, { completed: !todo.completed });
+                    var update = Utils.extend({}, todo, { completed: !todo.completed });
+                    this._outlookTasks.update(update);
+                    return update;
                 })();
         });
 

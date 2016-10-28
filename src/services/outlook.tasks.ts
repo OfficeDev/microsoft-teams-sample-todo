@@ -146,6 +146,33 @@ export class OutlookTasks implements ITodoService {
             });
     }
 
+    update(todo: ITodo): Promise<ITodo> {
+        return this._isAuthenticated().then(token => this._updateTodo(todo));
+    }
+
+    private _updateTodo(todo: ITodo): Promise<ITodo> {
+        return fetch(`${this._baseUrl}/me/tasks('${todo.id}')`,
+            {
+                method: "PATCH",
+                body: JSON.stringify({
+                    Subject: todo.title,
+                    Status: todo.completed ? 'Completed' : 'NotStarted',
+                    Importance: todo.importance == null ? 'normal' : todo.importance
+                }),
+                headers: {
+                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(this._convertTask)
+            .catch(error => {
+                console.error(error);
+                throw new Error('Failed to create your todo');
+            });
+    }
+
     delete(todo: ITodo): Promise<boolean> {
         return this._isAuthenticated().then(token => this._deleteTodo(todo));
     }
