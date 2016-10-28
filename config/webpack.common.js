@@ -6,6 +6,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     entry: {
         'app': './src/app.tsx',
+        'config': './src/config.tsx',
         'vendor': './src/vendor.ts'
     },
 
@@ -45,6 +46,13 @@ module.exports = {
             filename: 'index.html',
             template: path.resolve('index.html'),
             chunks: ['app', 'vendor']
+        }),
+
+        new HtmlWebpackPlugin({
+            title: 'Config • TodoMVC',
+            filename: 'config.html',
+            template: path.resolve('config.html'),
+            chunks: ['config', 'vendor']
         }),
 
         new ExtractTextPlugin('[name].css'),

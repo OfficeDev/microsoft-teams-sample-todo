@@ -2,6 +2,7 @@
 
 import { EndpointManager, IEndpoint } from '../authentication/endpoint.manager';
 import { TokenManager, IToken, ICode, IError } from '../authentication/token.manager';
+declare var microsoftTeams: any;
 
 /**
  * Custom error type to handle OAuth specific errors.
@@ -64,6 +65,11 @@ export class Authenticator {
      */
     authenticate(provider: string, force: boolean = false): Promise<IToken> {
         let token = this.tokens.get(provider);
+        try {
+            microsoftTeams.initialize();
+        }
+        catch (e) {
+        }
 
         if (token != null) {
             if (token.expires_at != null) {
@@ -175,7 +181,12 @@ export class Authenticator {
                 return false;
             }
 
-            Office.context.ui.messageParent(JSON.stringify(TokenManager.getToken()));
+            try {
+                microsoftTeams.initialize();
+            }
+            catch (e) {
+            }
+            microsoftTeams.authentication.notifySuccess(location.href);
             return true;
         }
     }
@@ -196,17 +207,7 @@ export class Authenticator {
     static get hasDialogAPI() {
         if (Authenticator._hasDialogAPI == null) {
             try {
-                Authenticator._hasDialogAPI =
-                    window.hasOwnProperty('Office') &&
-                    (
-                        (
-                            (<any>window).Office.context.requirements &&
-                            (<any>window).Office.context.requirements.isSetSupported('DialogAPI', '1.1')
-                        ) ||
-                        window.hasOwnProperty('Excel') ||
-                        window.hasOwnProperty('Word') ||
-                        window.hasOwnProperty('OneNote')
-                    )
+                Authenticator._hasDialogAPI = window.hasOwnProperty('microsoftTeams');
             }
             catch (e) {
                 Authenticator._hasDialogAPI = false;
@@ -270,40 +271,43 @@ export class Authenticator {
         let windowSize = this._determineDialogSize();
 
         return new Promise<IToken>((resolve, reject) => {
-            Office.context.ui.displayDialogAsync(params.url, windowSize, result => {
-                var dialog = result.value;
-                if (dialog == null) {
-                    return reject(new OAuthError(result.error.message));
-                }
-                dialog.addEventHandler((<any>Office).EventType.DialogMessageReceived, args => {
-                    dialog.close();
-                    try {
-                        if (args.message == null || args.message === '') {
-                            return reject(new OAuthError('No access_token or code could be parsed.'));
-                        }
+            var successCallback = message => {
+                try {
+                    if (message == null || message === '') {
+                        return reject(new OAuthError('No access_token or code could be parsed.'));
+                    }
 
-                        var json = JSON.parse(args.message);
-                        if (endpoint.state && +json.state !== params.state) {
-                            return reject(new OAuthError('State couldn\'t be verified'));
-                        }
-                        else if ('code' in json) {
-                            return resolve(this.exchangeCodeForToken(endpoint, (<ICode>json)));
-                        }
-                        else if ('access_token' in json) {
-                            this.tokens.add(endpoint.provider, json as IToken);
-                            return resolve(json as IToken);
-                        }
-                        else {
-                            return reject(new OAuthError((json as IError).error, json.state));
-                        }
+                    var json = TokenManager.getToken(message as string);
+                    if (endpoint.state && +json.state !== params.state) {
+                        return reject(new OAuthError('State couldn\'t be verified'));
                     }
-                    catch (exception) {
-                        return reject(new OAuthError('Error while parsing response: ' + JSON.stringify(exception)));
+                    else if ('code' in json) {
+                        return resolve(this.exchangeCodeForToken(endpoint, (<ICode>json)));
                     }
-                });
+                    else if ('access_token' in json) {
+                        this.tokens.add(endpoint.provider, json as IToken);
+                        return resolve(json as IToken);
+                    }
+                    else {
+                        return reject(new OAuthError((json as IError).error, json.state));
+                    }
+                }
+                catch (exception) {
+                    return reject(new OAuthError('Error while parsing response: ' + JSON.stringify(exception)));
+                }
+            };
+
+            microsoftTeams.authentication.authenticate({
+                url: params.url,
+                width: windowSize.toPixels().width,
+                height: windowSize.toPixels().height,
+                successCallback: successCallback,
+                failureCallback: exception => {
+                    return reject(new OAuthError('Error while launching dialog: ' + JSON.stringify(exception)));
+                }
             });
         });
-    }
+    };
 
     private _determineDialogSize() {
         var screenHeight = window.screen.height;
