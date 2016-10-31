@@ -1,0 +1,28 @@
+{
+    "$schema": "https://statics.teams.microsoft.com/sdk/v0.2/manifest/MicrosoftTeams.schema.json",
+    "manifestVersion": "0.2",
+    "id": "com.example.microsoftteamstabs.todo",
+    "version": "0.2",
+    "name": "ToDo",
+    "developer": {
+        "name": "Example company",   
+        "websiteUrl": "http://www.example.com",
+        "privacyUrl": "http://www.example.com/privacy",
+        "termsOfUseUrl": "http://www.example.com/termsofuse"
+    },
+    "description": {
+        "short": "Create and manange your Outlook tasks.",
+        "full": "Create and manange your Outlook tasks.  Select Bing Maps or Google Maps, and click Save."
+    },
+    "icons": {
+        "44": "todo44.png",
+        "88": "todo88.png"
+    },
+    "accentColor": "#004578",
+    "configUrl": "https://localhost:3000/config.html",
+    "canUpdateConfig": true,
+    "needsIdentity": false,
+    "validDomains": [
+        "*.login.microsoftonline.com"
+    ]
+}

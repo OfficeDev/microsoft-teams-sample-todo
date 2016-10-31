@@ -1,46 +1,62 @@
-# Microsoft Teams - Todo MVC Sample
+# Microsoft Teams 'Todo List' sample tab app
 
-This sample demonstrates on how to quickly integrate your existing Web Application with **Microsoft Teams**.
+This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform).  When it is added to a channel, it provides a basic task manager.
+* Its purpose is to illustrate how simple it is to convert an existing web app into a Microsoft Teams tab app.  Take a look at the [code diff between the 'before' and 'after' branches](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after).
+* It is not a realistic example of a team collaboration app.  The tasks shown belong to the user's individual account and not to a shared team account. 
 
-The following sample has been modified from **TodoMVC for React** that can be found [here](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react).
+## Prerequisites
 
-## Requirements
+An [Office 365 account with access to Microsoft Teams](setup.md).
 
-The sample requires `node.js` and uses the following stack:
+**TODO make this a link to setup.md in main docs repo**
 
-1. [`React by Facebook`](https://facebook.github.io/react/) as the UI Framework - .
-2. [`TypeScript`](https://www.typescriptlang.org/) as the transpiler.
-4. [`TodoMVC`](http://todomvc.com/examples/typescript-react/#/) base for TodoMVC functionality.
-5. [`Webpack`](https://webpack.github.io/) as the build tool.
+## Run the app
 
-## Get Started
+### Register the app so it can access to Outlook tasks
 
+1. Go to the [Microsoft Application Registration Portal](https://apps.dev.microsoft.com).
+2. Sign in with your Office 365 work/school account.  Don't use your personal Microsoft account.
+2. Add a new app.
+2. Take note of your new `Application ID`.
+2. Click on `Add Platform` and choose `Web`.
+3. Check `Allow Implicit Flow` and configure the redirect URL to be either `https://localhost:3000/config.html` or `https://<mywebsite>/config.html`.
+
+>**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](setup.md).
+
+**TODO make this a link to setup.md in main docs repo**
+
+### Host the tab apps "configuration page" and "content page" 
+
+1. Clone the repo.
+4. Edit `src/services/outlook.tasks.ts` line 22 as `clientId = <your applicationId>`, using the application ID obtained above..
+1. Install [node.js](https://nodejs.org) if you don't already have it. 
 1. Run `npm install`.
 2. Run `npm start` to start the `webpack-dev-server`.
 3. Alternatively, run `npm run build` to generate a deployable build.
 
-### Authentication
+### Add the tab to Microsoft Teams
 
-To get Outlook tasks, you'll need to configure the authentication in the following manner:
+1. Download the [tab app package](https://github.com/OfficeDev/microsoft-teams-sample-todo/blob/master/package/ToDoTab.zip) for this sample. 
+2. Create a new team for testing, if necessary.  Click **Create team** at the bottom of the left-hand panel.
+3. Select the team from the left-hand panel, select **... (more options)** and then select **View Team**.
+4. Select the **Developer (Preview)** tab, and then select **Upload**.
+5. Navigate to the zip file and select it.
+6. Go to any channel in the team.  Click the '+' to the right of the existing tabs. 
+7. Select your tab from the gallery that appears.
+8. Accept the consent prompt.
+9. Sign in using your Office 365 work/school account, and click Save.
 
-1. Register your application at [Microsoft Application Registration Portal](https://apps.dev.microsoft.com/Landing?ru=https%3a%2f%2fapps.dev.microsoft.com%2f).
-2. Click on `Add Platform` and choose `Web`.
-3. Check `Allow Implicit Flow` and configure the redirect url to be either `https://localhost:3000/config.html` or `https://<mywebsite>/config.html`.
-4. In the [`Outlook Tasks`](https://github.com/OfficeDev/microsoft-teams-sample-todo/blob/master/src/services/outlook.tasks.ts) file, edit line 22 as `clientId = <your clientId>`.
+> **Note:** To re-upload an updated package, with the same `id`, click the 'Replace' icon at the end of the tab's table row.  Don't click 'Upload' again: Microsoft Teams will say the tab already exists.
 
-### Branches
+## Code walk through
 
-While the `master` branch shows the latest state of the sample, you can also have a look at the following:
+While the `master` branch shows the latest state of the sample, take a look at the following [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after)between:
 
-1. [`before`](https://github.com/OfficeDev/microsoft-teams-sample-todo/tree/before): shows the standard TodoMVC project with minor additions such as Authentication, OutlookTasks.
+* [`before`](https://github.com/OfficeDev/microsoft-teams-sample-todo/tree/before): the initial app
 
-2. [`after`](https://github.com/OfficeDev/microsoft-teams-sample-todo/tree/before): shows the integration of the project in `before` with `Microsoft Teams`.
+* [`after`](https://github.com/OfficeDev/microsoft-teams-sample-todo/tree/after): the app after integration with Microsoft Teams.
 
-## Integrating with Microsoft Teams
-
-In order to integrate with Microsoft Teams some specific changes need to be made. These changes are well showcased in this [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after).
-
-Walking through the changes the following can be observed:
+Going through this step by step:
 
 1. We have added a new `config.html` & `config.tsx` page which is responsible for the the application to allow the user to manipulate any settings, perform authentication etc during the first launch.
 
@@ -53,8 +69,6 @@ Walking through the changes the following can be observed:
 5. We have added some styles to our `app.css`.
 
 6. Finally we have modified the `authentication` to depend on `Microsoft Teams` dialog instead.
-
-## Microsoft Teams API
 
 ### Handling the 'Save' event
 
@@ -86,3 +100,15 @@ microsoftTeams.authentication.authenticate({
     }
 });
 ```
+
+## Technology used
+
+The following sample has been modified from **TodoMVC for React** that can be found [here](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react).
+
+It uses the following stack:
+
+1. [`React by Facebook`](https://facebook.github.io/react/) as the UI Framework - .
+2. [`TypeScript`](https://www.typescriptlang.org/) as the transpiler.
+4. [`TodoMVC`](http://todomvc.com/examples/typescript-react/#/) base for TodoMVC functionality.
+5. [`Webpack`](https://webpack.github.io/) as the build tool.
+
