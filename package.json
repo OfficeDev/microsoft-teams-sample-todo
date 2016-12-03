@@ -15,7 +15,7 @@
   "private": true,
   "scripts": {
     "build": "rimraf dist && webpack --config config/webpack.prod.js --colors --display-modules --progress",
-    "start": "webpack-dev-server --port 3000 --config config/webpack.dev.js --colors --display-modules --progress --open",
+    "start": "webpack-dev-server --port 3000 --config config/webpack.dev.js --colors --display-modules --progress --open --inline",
     "postinstall": "typings install"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
     "office-ui-fabric-js": "^1.1.0",
     "core-js": "^2.4.1",
     "whatwg-fetch": "^1.0.0",
-    "@microsoft/office-js-helpers": "^0.2.0"
+    "@microsoft/office-js-helpers": "0.3.0-beta.18"
   },
   "devDependencies": {
     "rimraf": "^2.5.4",

@@ -1,5 +1,5 @@
 import { ITodo, IProfile } from '../core';
-import { Authenticator, Storage, IToken, IEndpoint } from '../auth';
+import { Authenticator, IToken } from '../auth';
 
 interface ITodoService {
     authenticator: Authenticator;
@@ -11,111 +11,64 @@ interface ITodoService {
 }
 
 export class OutlookTasks implements ITodoService {
-    graphToken: IToken;
-    tasksToken: IToken;
+    private _token: IToken;
     private _retryCounter = 0;
     private _baseUrl: string = 'https://outlook.office.com/api/v2.0';
-    private _graphUrl: string = 'https://graph.microsoft.com/v1.0';
+    private _login: boolean;
 
     authenticator: Authenticator;
-    storage: Storage<IProfile>;
-    clientId: '<clientId>';
+    clientId = 'bd9464a2-8b29-4165-a3c8-4d4dfd64b59a';
 
     constructor() {
         this.authenticator = new Authenticator();
-        this.storage = new Storage<IProfile>('GraphProfile');
+        this._token = this.authenticator.tokens.get('Microsoft');
         this.authenticator.endpoints.registerMicrosoftAuth(this.clientId, {
-            redirectUrl: `${location.origin}/config.html`
+            baseUrl: 'https://login.microsoftonline.com/organizations/oauth2/v2.0',
+            scope: 'https://outlook.office.com/tasks.readwrite'
         });
-
-        this.authenticator.endpoints.add('Tasks', {
-            clientId: this.clientId,
-            baseUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0',
-            redirectUrl: `${location.origin}/config.html`,
-            authorizeUrl: '/authorize',
-            responseType: 'token',
-            scope: 'https://outlook.office.com/tasks.readwrite',
-            nonce: true,
-            state: true,
-            extraParameters: '&response_mode=fragment',
-        } as IEndpoint)
-
-        this.graphToken = this.authenticator.tokens.get('Microsoft');
     }
 
-    login(graph?: boolean): Promise<IToken> {
-        var scope = graph ? 'Microsoft' : 'Tasks';
-        return this.authenticator.authenticate(scope)
-            .then(token => graph ? this.graphToken = token : this.tasksToken = token)
+    login(): Promise<IToken> {
+        return this.authenticator.authenticate('Microsoft', true)
+            .then(token => {
+                this._token = token;
+                console.log(JSON.stringify(token));
+                return token;
+            })
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to login using your Microsoft Account');
             });
     }
 
     logout() {
         this.authenticator.tokens.clear();
-        this.storage.clear();
-    }
-
-    profile(): Promise<IProfile> {
-        var profile = this.storage.get('Profile');
-        if (profile) return Promise.resolve(profile);
-        return this._isAuthenticated(true)
-            .then(token => this._getProfile())
-            .then(profile => this.storage.add('Profile', profile));
-    }
-
-    private _getProfile(): Promise<IProfile> {
-        var profile = {} as IProfile;
-        return Promise.all([
-            this._getUserInfo(),
-            this._getUserPhoto()
-        ])
-            .then(response => {
-                var [userInfo, userPhoto] = response;
-                profile = userInfo;
-                profile.thumbnail = userPhoto;
-                return profile;
-            });
-    }
-
-    private _getUserInfo(): Promise<any> {
-        return fetch(`${this._graphUrl}/me`,
-            {
-                headers: {
-                    Authorization: `Bearer ${this.graphToken.access_token}`
-                }
-            })
-            .then(res => res.json());
-    }
-
-    private _getUserPhoto(): Promise<any> {
-        return fetch(`${this._graphUrl}/me/photo/$value`,
-            {
-                headers: {
-                    Authorization: `Bearer ${this.graphToken.access_token}`
-                }
-            })
-            .then(res => res.blob())
-            .then(blob => window.URL.createObjectURL(blob))
     }
 
     get(): Promise<ITodo[]> {
         return this._isAuthenticated().then(token => this._getTodos());
     }
 
+    private _checkForErrors = response => {
+        if (response.error) {
+            throw new Error(response.error.message)
+        }
+
+        return response;
+    }
+
     private _getTodos(): Promise<ITodo[]> {
         return fetch(`${this._baseUrl}/me/tasks`,
             {
                 headers: {
-                    Authorization: `Bearer ${this.tasksToken.access_token}`
+                    'Authorization': `Bearer ${this._token.access_token}`
                 }
             })
             .then(res => res.json())
+            .then(res => this._checkForErrors(res))
             .then(res => res.value.map(this._convertTask))
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to get your todos');
             });
     }
@@ -134,15 +87,16 @@ export class OutlookTasks implements ITodoService {
                     Importance: todo.importance == null ? 'normal' : todo.importance
                 }),
                 headers: {
-                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
+                    'Authorization': `Bearer ${this._token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
+            .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to create your todo');
             });
     }
@@ -161,15 +115,16 @@ export class OutlookTasks implements ITodoService {
                     Importance: todo.importance == null ? 'normal' : todo.importance
                 }),
                 headers: {
-                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
+                    'Authorization': `Bearer ${this._token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
+            .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to create your todo');
             });
     }
@@ -183,14 +138,15 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "DELETE",
                 headers: {
-                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
+                    'Authorization': `Bearer ${this._token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             })
             .then(res => res.status === 204)
+            .then(res => this._checkForErrors(res))
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to delete your todo');
             });
     }
@@ -204,33 +160,25 @@ export class OutlookTasks implements ITodoService {
             {
                 method: "POST",
                 headers: {
-                    'Authorization': `Bearer ${this.tasksToken.access_token}`,
+                    'Authorization': `Bearer ${this._token.access_token}`,
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 }
             })
             .then(res => res.json())
+            .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.error(error);
+                console.log(error);
                 throw new Error('Failed to mark your todo as complete');
             });
     }
 
-    private _isAuthenticated(graph?: boolean): Promise<IToken> {
-        var token = graph ? this.graphToken : this.tasksToken;
+    private _isAuthenticated(): Promise<IToken> {
+        var token = this._token;
         if (token == null) {
-            if (this._retryCounter < 3) {
-                return this.login()
-                    .catch(e => {
-                        console.error(`Login failed... retrying... ${++this._retryCounter}`);
-                        return this._isAuthenticated(graph);
-                    });
-            }
-            else {
-                this._retryCounter = 0;
-                throw new Error('Failed to login using your Microsoft Account');
-            }
+            (window as any).login = this.login.bind(this);
+            return Promise.reject('Please login first.');
         }
         else {
             return Promise.resolve(token);
