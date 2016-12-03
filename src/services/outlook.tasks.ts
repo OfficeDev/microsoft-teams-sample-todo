@@ -29,7 +29,7 @@ export class OutlookTasks implements ITodoService {
     }
 
     login(): Promise<IToken> {
-        return this.authenticator.authenticate('Microsoft')
+        return this.authenticator.useMicrosoftTeamsAuth('Microsoft')
             .then(token => this._token = token)
             .catch(error => {
                 Utilities.log(error);
