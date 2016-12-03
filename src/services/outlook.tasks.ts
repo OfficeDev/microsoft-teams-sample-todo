@@ -1,5 +1,5 @@
 import { ITodo, IProfile } from '../core';
-import { Authenticator, IToken } from '../auth';
+import { Authenticator, IToken, Utilities } from '@microsoft/office-js-helpers';
 
 interface ITodoService {
     authenticator: Authenticator;
@@ -29,14 +29,10 @@ export class OutlookTasks implements ITodoService {
     }
 
     login(): Promise<IToken> {
-        return this.authenticator.authenticate('Microsoft', true)
-            .then(token => {
-                this._token = token;
-                console.log(JSON.stringify(token));
-                return token;
-            })
+        return this.authenticator.authenticate('Microsoft')
+            .then(token => this._token = token)
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to login using your Microsoft Account');
             });
     }
@@ -68,7 +64,7 @@ export class OutlookTasks implements ITodoService {
             .then(res => this._checkForErrors(res))
             .then(res => res.value.map(this._convertTask))
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to get your todos');
             });
     }
@@ -96,7 +92,7 @@ export class OutlookTasks implements ITodoService {
             .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to create your todo');
             });
     }
@@ -124,7 +120,7 @@ export class OutlookTasks implements ITodoService {
             .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to create your todo');
             });
     }
@@ -146,7 +142,7 @@ export class OutlookTasks implements ITodoService {
             .then(res => res.status === 204)
             .then(res => this._checkForErrors(res))
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to delete your todo');
             });
     }
@@ -169,7 +165,7 @@ export class OutlookTasks implements ITodoService {
             .then(res => this._checkForErrors(res))
             .then(this._convertTask)
             .catch(error => {
-                console.log(error);
+                Utilities.log(error);
                 throw new Error('Failed to mark your todo as complete');
             });
     }
@@ -177,8 +173,17 @@ export class OutlookTasks implements ITodoService {
     private _isAuthenticated(): Promise<IToken> {
         var token = this._token;
         if (token == null) {
-            (window as any).login = this.login.bind(this);
-            return Promise.reject('Please login first.');
+            if (this._retryCounter < 3) {
+                return this.login()
+                    .catch(e => {
+                        Utilities.log(`Login failed... retrying... ${++this._retryCounter}`);
+                        return this._isAuthenticated();
+                    });
+            }
+            else {
+                this._retryCounter = 0;
+                throw new Error('Failed to login using your Microsoft Account');
+            }
         }
         else {
             return Promise.resolve(token);
