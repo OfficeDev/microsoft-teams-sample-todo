@@ -1,4 +1,13 @@
 import { ITodo, IProfile } from '../core';
+
+/**
+ * We are using OfficeHelpers library as it allows us to complete authentication
+ * with relative ease and also provides other useful Utilities.
+ *
+ * Note: We have included a beta version of OfficeHelpers that has support for
+ * MicrosoftTeams and the API signatures might change when OfficeHelpers for
+ * Microsoft Teams releases.
+ */
 import { Authenticator, IToken, Utilities } from '@microsoft/office-js-helpers';
 
 interface ITodoService {
@@ -17,18 +26,60 @@ export class OutlookTasks implements ITodoService {
     private _login: boolean;
 
     authenticator: Authenticator;
+
+    /**
+     * Note: This is a demo clientID and can be removed/deactivated
+     * at any point of time. Please modify this to use your own
+     * clientId.
+     */
     clientId = 'bd9464a2-8b29-4165-a3c8-4d4dfd64b59a';
 
     constructor() {
+
+        /**
+         * OfficeHelpers provides a authentication utility that does Implicit OAuth
+         * in simple steps and supports Microsoft, AzureAD, Google, Facebook out of the box.
+         *
+         * Note: We have included a beta version of OfficeHelpers that has support for
+         * MicrosoftTeams and the API signatures might change when OfficeHelpers for
+         * Microsoft Teams releases.
+         *
+         * If you wish to achieve the same authentication call without OfficeHelpers,
+         * then you would need to call the following Microsoft Teams API manually and
+         * handle token mangement yourself.
+         *
+         * microsoftTeams.authentication.authenticate({
+         *     url: <constructed OAuth url to the authentication provider with required parameters>,
+         *     width: <width in pixels>,
+         *     height: <height in pixels>,
+         *     successCallback: <handle message from dialog here>,
+         *     failureCallback: <handle error from dialog here>
+         * });
+         *
+         * Inside the dialog you can call
+         * microsoftTeams.authentication.notifySuccess(<message string to be sent back to app>)
+         * OR
+         * microsoftTeams.authentication.notifyFailure(<error string to be sent back to app>)
+         * accordingly.
+         */
         this.authenticator = new Authenticator();
-        this._token = this.authenticator.tokens.get('Microsoft');
         this.authenticator.endpoints.registerMicrosoftAuth(this.clientId, {
             baseUrl: 'https://login.microsoftonline.com/organizations/oauth2/v2.0',
             scope: 'https://outlook.office.com/tasks.readwrite'
         });
+
+
+        this._token = this.authenticator.tokens.get('Microsoft');
+        if (this._token == null) {
+            this.login();
+        }
     }
 
     login(): Promise<IToken> {
+        /**
+         * Read the comments above to achieve Authentication without depending on
+         * the OfficeHelpers library.
+         */
         return this.authenticator.useMicrosoftTeamsAuth('Microsoft')
             .then(token => this._token = token)
             .catch(error => {
