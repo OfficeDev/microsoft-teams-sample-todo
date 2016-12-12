@@ -58,7 +58,7 @@ Going through this step by step:
 
 ### Handling the 'Save' event
 
-When the user adds the Tab, the configuration page is presented (config.html).  In this case, the code authenticates the user if possible.  The following code enables the Save button and saves the appropriate settings and determines which content to display in the tab (in this case, just the project's index.html). 
+When the user adds the Tab, the configuration page is presented (config.html).  In this case, the code authenticates the user if possible.  The following code enables the Save button, and sets the SaveHandler, which will store whatcontent to display in the tab (in this case, just the project's index.html). 
 
 In config.tsx:
 ```typescript
