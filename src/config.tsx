@@ -15,6 +15,7 @@ class Config extends React.Component<any, any> {
         if (!microsoftTeams) return;
 
         try {
+            /** Initialize the Teams library before any other SDK calls. */
             microsoftTeams.initialize();
             this.state = {
                 groupId: null,
@@ -25,6 +26,7 @@ class Config extends React.Component<any, any> {
             Utilities.log(e);
         }
         finally {
+            /** Pass the Context interface to the initialize function below */
             microsoftTeams.getContext(context => this.initialize(context as any));
         }
     }
@@ -63,11 +65,19 @@ class Config extends React.Component<any, any> {
         )
     }
 
+    /** 
+     * This will save off the Context and registers the Save Handler, which will be called when the user attempts to Save.  This handler will be used to save the Settings for the Tab content.
+     * @param {object} groupId - The O365 group id for the team.
+     * @param {object} upn - The current user's upn (user principal name).
+     */
     initialize({ groupId, upn}) {
         this.setState({ groupId, upn });
         console.log(this.state);
+        /** Enable the Save button  */
         microsoftTeams.settings.setValidityState(true);
+        /** Register the save handler */
         microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
+            /** Store Tab content settings */
             microsoftTeams.settings.setSettings({
                 contentUrl: `${location.origin}/index.html`,
                 suggestedDisplayName: "My Tasks",

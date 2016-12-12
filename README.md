@@ -20,11 +20,11 @@ This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamsta
 
 ### Add the tab to Microsoft Teams
 
-1. Download the [tab app package](https://github.com/OfficeDev/microsoft-teams-sample-todo/raw/before-final/package/todo.dev.zip) for this sample.
+1. Download the [tab app dev package](https://github.com/OfficeDev/microsoft-teams-sample-todo/raw/before-final/package/todo.dev.zip) zip file for this sample.
 2. Create a new team for testing, if necessary. Click **Create team** at the bottom of the left-hand panel.
 3. Select the team from the left-hand panel, select **... (more options)** and then select **View Team**.
 4. Select the **Developer (Preview)** tab, and then select **Upload**.
-5. Navigate to the zip file and select it.
+5. Navigate to the downloaded zip file from step 1 above and select it.
 6. Go to any channel in the team.  Click the '+' to the right of the existing tabs.
 7. Select your tab from the gallery that appears.
 8. Accept the consent prompt.
@@ -32,7 +32,7 @@ This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamsta
 
 > **Note:** To re-upload an updated package, with the same `id`, click the 'Replace' icon at the end of the tab's table row.  Don't click 'Upload' again: Microsoft Teams will say the tab already exists.
 
-> It is advisable to have multiple configs, one per environment. The names of the zip files can be anything such as `todo.dev.zip`, `todo.prod.zip` etc.. but the zip must contain a `manifest.json` with a unique `namespace`.
+> It is advisable to have multiple configs, one per environment. The names of the zip files can be anything such as `todo.dev.zip`, `todo.prod.zip` etc. but the zip must contain a `manifest.json` with a unique `id`.  For more information on creating manifests, see [documentation on MSDN](https://msdn.microsoft.com/en-us/microsoft-teams/createpackage).
 
 ## Code walk through
 
@@ -44,7 +44,7 @@ While the `master` branch shows the latest state of the sample, take a look at t
 
 Going through this step by step:
 
-1. We have added a new `config.html` & `config.tsx` page which is responsible for the the application to allow the user to manipulate any settings, perform single signon Authentication etc during the first launch. This is required so that the team administrator can configure the application/settings.
+1. We have added a new `config.html` & `config.tsx` page which is responsible for the the application to allow the user to manipulate any settings, perform single signon Authentication etc during the first launch. This is required so that the team administrator can configure the application/settings.  For more info: [Create the configuration page on MSDN](https://msdn.microsoft.com/en-us/microsoft-teams/createconfigpage)
 
 2. We have added the same `config.html` file to our `webpack.common.js` configuration so that it can inject the right bundles during runtime.
 
@@ -58,19 +58,26 @@ Going through this step by step:
 
 ### Handling the 'Save' event
 
+When the user adds the Tab, the configuration page is presented (config.html).  In this case, the code authenticates the user if possible.  The following code enables the Save button and saves the appropriate settings and determines which content to display in the tab (in this case, just the project's index.html). 
+
+In config.tsx:
 ```typescript
-function completeSave() {
-    if (!microsoftTeams) return;
-    microsoftTeams.settings.setValidityState(true);
-    microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
-        microsoftTeams.settings.setSettings({
-            contentUrl: `${location.origin}/index.html`,
-            suggestedDisplayName: "My Tasks",
-            websiteUrl: `${location.origin}/index.html`
+    initialize({ groupId, upn}) {
+        this.setState({ groupId, upn });
+        console.log(this.state);
+        /** Enable the Save button  */
+        microsoftTeams.settings.setValidityState(true);
+        /** Register the save handler */
+        microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
+            /** Store Tab content settings */
+            microsoftTeams.settings.setSettings({
+                contentUrl: `${location.origin}/index.html`,
+                suggestedDisplayName: "My Tasks",
+                websiteUrl: `${location.origin}/index.html`
+            });
+            saveEvent.notifySuccess();
         });
-        saveEvent.notifySuccess();
-    });
-}
+    }
 ```
 
 ### Invoking the Authentication dialog
