@@ -7,7 +7,7 @@ This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamsta
 
 ## Prerequisites
 
-1. An [Office 365 account with access to Microsoft Teams](https://github.com/OfficeDev/Microsoft-teams-docs/blob/master/teams/setup.md).
+1. An [Office 365 account with access to Microsoft Teams](https://msdn.microsoft.com/en-us/microsoft-teams/setup).
 2. This sample is built using [Node.js](https://nodejs.org).  Download and install the recommended version if you don't already have it.
 
 ## Run the app
@@ -107,7 +107,7 @@ The following sample has been modified from **TodoMVC for React** that can be fo
 
 It uses the following stack:
 
-1. [`React by Facebook`](https://facebook.github.io/react/) as the UI Framework - .
+1. [`React by Facebook`](https://facebook.github.io/react/) as the UI Framework.
 2. [`TypeScript`](https://www.typescriptlang.org/) as the transpiler.
 4. [`TodoMVC`](http://todomvc.com/examples/typescript-react/#/) base for TodoMVC functionality.
 5. [`Webpack`](https://webpack.github.io/) as the build tool.
@@ -126,7 +126,7 @@ Note that this will not be necessary if you use the local Dev option above, but 
 
 For more information on hosting your own tab pages, see the [Microsoft Teams 'Get Started' sample README](https://github.com/OfficeDev/microsoft-teams-sample-get-started#host-tab-pages-over-https).
 
->**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://github.com/OfficeDev/Microsoft-teams-docs/blob/master/teams/setup.md).
+>**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://msdn.microsoft.com/en-us/microsoft-teams/setup).
 
 
 ## Credits
