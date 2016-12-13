@@ -2,21 +2,24 @@
 
 This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform).  When it is added to a channel, it provides a basic task manager which integrates with your personal Outlook Tasks.
 * Its purpose is to illustrate how simple it is to convert an existing web app into a Microsoft Teams tab app.  Take a look at the [code diff between the 'before' and 'after' branches](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/85ac809a2b52b528e8323a0a14e419afca21da12...9a1224eb276fa15a76f9e4882c4abe5ae8b68a99).
-* It is not a realistic example of a team collaboration app.  The tasks shown belong to the user's individual account and not to a shared team account.
+* This is not a realistic example of a team collaboration app.  The tasks shown belong to the user's individual account and not to a shared team account.
+* For more information on developing experiences for Microsoft Teams, please review the Microsoft Teams [developer documentation](https://msdn.microsoft.com/en-us/microsoft-teams/index).
 
 ## Prerequisites
 
 1. An [Office 365 account with access to Microsoft Teams](https://github.com/OfficeDev/Microsoft-teams-docs/blob/master/teams/setup.md).
-2. Install [node.js](https://nodejs.org) if you don't already have it.
+2. This sample is built using [Node.js](https://nodejs.org).  Download and install the recommended version if you don't already have it.
 
 ## Run the app
 
 ### Host the tab apps "configuration page" and "content page"
 
+To enable the app in Dev mode:
 1. Clone the repo.
-2. Run `npm install`.
-3. Run `npm start` to start the `webpack-dev-server`.
-4. Alternatively, run `npm run build` to generate a deployable build.
+2. Open a command line in the repo subdirectory.
+3. Run `npm install` (included as part of Node.js) from the command line. 
+4. Run `npm start` to start the `webpack-dev-server` to enable the dev app to function.
+5. Alternatively, run `npm run build` to generate a deployable build, which you can host in your own environment.  Note:  you will need to modify the config.url in the manifest to point to your hosting location. [More information](#registering-an-application-to-authenticate-with-microsoft)
 
 ### Add the tab to Microsoft Teams
 
@@ -28,15 +31,17 @@ This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamsta
 6. Go to any channel in the team.  Click the '+' to the right of the existing tabs.
 7. Select your tab from the gallery that appears.
 8. Accept the consent prompt.
-9. Sign in using your Office 365 work/school account, and click Save.
+9. If needed, sign in using your Office 365 work/school account.  Note that the code will try to do silent authentication if possible.
+10. Validate authentication information.
+11. Hit Save to add the tab to channel.
 
 > **Note:** To re-upload an updated package, with the same `id`, click the 'Replace' icon at the end of the tab's table row.  Don't click 'Upload' again: Microsoft Teams will say the tab already exists.
 
-> It is advisable to have multiple configs, one per environment. The names of the zip files can be anything such as `todo.dev.zip`, `todo.prod.zip` etc. but the zip must contain a `manifest.json` with a unique `id`.  For more information on creating manifests, see [documentation on MSDN](https://msdn.microsoft.com/en-us/microsoft-teams/createpackage).
+> It is advisable to have multiple configs, one per environment. The names of the zip files can be anything such as `todo.dev.zip`, `todo.prod.zip` etc. but the zip must contain a `manifest.json` with a unique `id`.  See [Creating a manifest for your tab](https://msdn.microsoft.com/en-us/microsoft-teams/createpackage).
 
 ## Code walk through
 
-While the `master` branch shows the latest state of the sample, take a look at the following [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/85ac809a2b52b528e8323a0a14e419afca21da12...9a1224eb276fa15a76f9e4882c4abe5ae8b68a99)between:
+While the `master` branch shows the latest state of the sample, take a look at the following [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/85ac809a2b52b528e8323a0a14e419afca21da12...9a1224eb276fa15a76f9e4882c4abe5ae8b68a99) between:
 
 * [`before`](https://github.com/OfficeDev/microsoft-teams-sample-todo/commit/85ac809a2b52b528e8323a0a14e419afca21da12): the initial app
 
@@ -44,21 +49,37 @@ While the `master` branch shows the latest state of the sample, take a look at t
 
 Going through this step by step:
 
-1. We have added a new `config.html` & `config.tsx` page which is responsible for the the application to allow the user to manipulate any settings, perform single signon Authentication etc during the first launch. This is required so that the team administrator can configure the application/settings.  For more info: [Create the configuration page on MSDN](https://msdn.microsoft.com/en-us/microsoft-teams/createconfigpage)
+1. We have added a new `config.html` and `config.tsx` page which is responsible for the the application to allow the user to manipulate any settings, perform single signon Authentication etc. during the first launch. This is required so that the team administrator can configure the application/settings.  See [Create the configuration page](https://msdn.microsoft.com/en-us/microsoft-teams/createconfigpage).
 
 2. We have added the same `config.html` file to our `webpack.common.js` configuration so that it can inject the right bundles during runtime.
 
-3. We add a reference to `MicrosoftTeams.js` in our index.html & added `MicrosoftTeams.d.ts` for Typescript intellisense.
+3. We add a reference to `MicrosoftTeams.js` in our index.html and added `MicrosoftTeams.d.ts` for Typescript intellisense.
 
 4. We have added a `manifest.dev.json`, `manifest.prod.json` and two logos for size *44x44* and *88x88*. Remember to rename these as `manifest.json` in your zip files that you upload to Microsoft Teams.
 
 5. We have added some styles to our `app.css`.
 
-6. Finally we have modified the `authentication` to depend on `Microsoft Teams` authentication instead.
+6. Finally we have modified the `authentication` in outlook.tasks.ts to depend instead on 'useMicrosoftTeamsAuth', a new feature from the beta version of OfficeHelpers referenced in this sample.
+
+### Invoking the Authentication dialog
+
+When the user adds the tab, the configuration page is presented (config.html).  In this case, the code authenticates the user if possible.  
+
+Authentication leverages a new Teams-specific function in the latest (>0.3.2) beta version of the [office-js-helpers](https://github.com/OfficeDev/office-js-helpers) library.  This helper function will attempt to silently authenticate, but if it cannot, it will call the Microsoft Teams specific auth dialog for you.  For more information on the full Authentication process in Microsoft Teams, please review [Authenticating a user](https://msdn.microsoft.com/en-us/microsoft-teams/auth) in the Microsoft Teams [developer documentation](https://msdn.microsoft.com/en-us/microsoft-teams/index).
+
+In outlook.tasks.ts:
+```typescript
+ return this.authenticator.useMicrosoftTeamsAuth('Microsoft')
+    .then(token => this._token = token)
+    .catch(error => {
+        Utilities.log(error);
+        throw new Error('Failed to login using your Microsoft Account');
+    });
+```
 
 ### Handling the 'Save' event
 
-When the user adds the Tab, the configuration page is presented (config.html).  In this case, the code authenticates the user if possible.  The following code enables the Save button, and sets the SaveHandler, which will store whatcontent to display in the tab (in this case, just the project's index.html). 
+After successful sign-in, the user will Save the tab into the channel.  The following code enables the Save button, and sets the SaveHandler, which will store what content to display in the tab (in this case, just the project's index.html). 
 
 In config.tsx:
 ```typescript
@@ -80,43 +101,6 @@ In config.tsx:
     }
 ```
 
-### Invoking the Authentication dialog
-
-#### Using the [office-js-helpers](https://github.com/OfficeDev/office-js-helpers) library.
-```typescript
-import { Authenticator, IToken, Utilities } from '@microsoft/office-js-helpers';
-
-this.authenticator = new Authenticator();
-this.authenticator.endpoints.registerMicrosoftAuth(this.clientId, {
-    baseUrl: 'https://login.microsoftonline.com/organizations/oauth2/v2.0',
-    scope: 'https://outlook.office.com/tasks.readwrite'
-});
-
- return this.authenticator.useMicrosoftTeamsAuth('Microsoft')
-    .then(token => this._token = token)
-    .catch(error => {
-        Utilities.log(error);
-        throw new Error('Failed to login using your Microsoft Account');
-    });
-```
-
-#### Using Microsoft Teams dialog
-```typescript
-microsoftTeams.authentication.authenticate({
-    url: <constructed OAuth url to the authentication provider with required parameters>,
-    width: <width in pixels>,
-    height: <height in pixels>,
-    successCallback: <handle message from dialog here>,
-    failureCallback: <handle error from dialog here>
-});
-
-// Inside the dialog you can call
-microsoftTeams.authentication.notifySuccess(<message string to be sent back to app>)
-
-// OR
-microsoftTeams.authentication.notifyFailure(<error string to be sent back to app>)
-```
-
 ## Technology used
 
 The following sample has been modified from **TodoMVC for React** that can be found [here](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react).
@@ -130,7 +114,8 @@ It uses the following stack:
 
 ## Additional Resources
 
-### Registering an application to authenticate with Microsoft
+### Registering an application to authenticate with Microsoft 
+Note that this will not be necessary if you use the local Dev option above, but if you choose to host this tab in your own environment, you must register the application in order to authenticate.
 
 1. Go to the [Microsoft Application Registration Portal](https://apps.dev.microsoft.com).
 2. Sign in with your Office 365 work/school account.  Don't use your personal Microsoft account.
@@ -138,21 +123,15 @@ It uses the following stack:
 2. Take note of your new `Application ID`.
 2. Click on `Add Platform` and choose `Web`.
 3. Check `Allow Implicit Flow` and configure the redirect URL to be `https://<mywebsite>/config.html`.
+
+For more information on hosting your own tab pages, see the [Microsoft Teams 'Get Started' sample README](https://github.com/OfficeDev/microsoft-teams-sample-get-started#host-tab-pages-over-https).
+
+>**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://github.com/OfficeDev/Microsoft-teams-docs/blob/master/teams/setup.md).
+
 
 ## Credits
 
 This project is based on the TodoMVC Typescript - React template located [here](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react).
-
-### Registering an application to authenticate with Microsoft
-
-1. Go to the [Microsoft Application Registration Portal](https://apps.dev.microsoft.com).
-2. Sign in with your Office 365 work/school account.  Don't use your personal Microsoft account.
-2. Add a new app.
-2. Take note of your new `Application ID`.
-2. Click on `Add Platform` and choose `Web`.
-3. Check `Allow Implicit Flow` and configure the redirect URL to be `https://<mywebsite>/config.html`.
-
->**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://github.com/OfficeDev/Microsoft-teams-docs/blob/master/teams/setup.md).
 
 ## Contributing
 
