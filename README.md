@@ -1,6 +1,6 @@
 # Microsoft Teams 'Todo List' sample tab app
 
-This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform).  The point of this sample to illustrate how simple it is to convert an existing web app into a Microsoft Teams tab app.  The existing web app, [**TodoMVC for React**](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react), provides a basic task manager which integrates with your personal Outlook Tasks. With only a few minor modifications, this web view can be added to a channel as a tab app.  Take a look at the [code diff between the 'before' and 'after' branches](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/85ac809a2b52b528e8323a0a14e419afca21da12...9a1224eb276fa15a76f9e4882c4abe5ae8b68a99) to see what changes were made.
+This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform).  The point of this sample to illustrate how simple it is to convert an existing web app into a Microsoft Teams tab app.  The existing web app, [**TodoMVC for React**](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react), provides a basic task manager which integrates with your personal Outlook Tasks. With only a few minor modifications, this web view can be added to a channel as a tab app.  Take a look at the [code diff between the 'before' and 'after' branches](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after) to see what changes were made.
 
 > **Note:** This is not a realistic example of a team collaboration app.  The tasks shown belong to the user's individual account and not to a shared team account.
 
@@ -42,11 +42,11 @@ To enable the app in Dev mode:
 
 ## Code walk through
 
-While the `master` branch shows the latest state of the sample, take a look at the following [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/85ac809a2b52b528e8323a0a14e419afca21da12...9a1224eb276fa15a76f9e4882c4abe5ae8b68a99) between:
+While the `master` branch shows the latest state of the sample, take a look at the following [code diff](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after) between:
 
-* [`before`](https://github.com/OfficeDev/microsoft-teams-sample-todo/commit/85ac809a2b52b528e8323a0a14e419afca21da12): the initial app
+* [`before`](https://github.com/OfficeDev/microsoft-teams-sample-todo/commit/before): the initial app
 
-* [`after`](https://github.com/OfficeDev/microsoft-teams-sample-todo/commit/9a1224eb276fa15a76f9e4882c4abe5ae8b68a99): the app after integration with Microsoft Teams.
+* [`after`](https://github.com/OfficeDev/microsoft-teams-sample-todo/commit/after): the app after integration with Microsoft Teams.
 
 Going through this step by step:
 
