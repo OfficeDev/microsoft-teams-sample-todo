@@ -2,6 +2,35 @@ body {
     background-color: #004578;
 }
 
+body.config {
+    background-color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+}
+
+.config p {
+    padding: 0;
+    margin: 0;
+}
+
+.config .ms-Persona {
+    margin-top: 30px;
+}
+
+.config .ms-Persona-details p:first-child {
+    margin-bottom: 15px;
+    opacity: 0.6;
+}
+
+.config .ms-Persona-details p:last-child {
+    margin-top: 8px;
+    opacity: 0.6;
+}
+
+.config .ms-Button {
+    margin-top: 20px;
+}
+
 .todoapp h1 {
     color: #c7e0f4;
 }

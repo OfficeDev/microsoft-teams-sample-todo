@@ -80,7 +80,7 @@ export class OutlookTasks implements ITodoService {
          * the OfficeHelpers library.
          */
         try {
-            this._token = await this.authenticator.authenticate('Microsoft', false);
+            this._token = await this.authenticator.authenticate('Microsoft', false, true /* Use Microsoft Teams Dialog */);
             return this._token;
         }
         catch (error) {
