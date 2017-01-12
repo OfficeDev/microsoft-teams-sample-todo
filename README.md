@@ -15,12 +15,21 @@ This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamsta
 
 ### Host the tab apps "configuration page" and "content page"
 
-To enable the app in Dev mode:
+As the tab configuration and content pages are web apps, they must be hosted.  
+
+First, we'll prepare the project:
+
 1. Clone the repo.
 2. Open a command line in the repo subdirectory.
 3. Run `npm install` (included as part of Node.js) from the command line.
-4. Run `npm start` to start the `webpack-dev-server` to enable the dev app to function.
-5. Alternatively, run `npm run build` to generate a deployable build, which you can host in your own environment.  Note:  you will need to modify the config.url in the manifest to point to your hosting location. [More information](#registering-an-application-to-authenticate-with-microsoft)
+
+To host the app locally:
+* In the repo subdirectory, run `npm start` to start the `webpack-dev-server` to enable the dev app to function.
+* Note that the dev manifest is set up to use localhost, so no additional configuration would be needed.
+
+Optionally, to build a deployable app, which you can host in your own environment:
+* In the repo subdirectory, run `npm run build` to generate a deployable build.
+* Modify the config.url in the prod manifest to point to your hosting location. [See below](#registering-an-application-to-authenticate-with-microsoft)
 
 ### Add the tab to Microsoft Teams
 
@@ -104,8 +113,7 @@ In config.tsx:
 
 ## Technology used
 
-
-It uses the following stack:
+This sample uses the following stack:
 
 1. [`React by Facebook`](https://facebook.github.io/react/) as the UI Framework.
 2. [`TypeScript`](https://www.typescriptlang.org/) as the transpiler.
@@ -126,7 +134,7 @@ Note that this will not be necessary if you use the local Dev option above, but 
 
 For more information on hosting your own tab pages, see the [Microsoft Teams 'Get Started' sample README](https://github.com/OfficeDev/microsoft-teams-sample-get-started#host-tab-pages-over-https).
 
->**Note:** By defult, your organization should allow you to create new apps. But if it doesn't, you can use a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://msdn.microsoft.com/en-us/microsoft-teams/setup).
+>**Note:** By default, your organization should allow you to create new apps. But if it doesn't, you can get a developer test tenant, a one-year trial subscription of Office 365 Developer at no charge. [Here's how](https://msdn.microsoft.com/en-us/microsoft-teams/setup).
 
 
 ## Credits
