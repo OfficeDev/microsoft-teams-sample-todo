@@ -11,8 +11,8 @@
         "termsOfUseUrl": "http://www.example.com/termsofuse"
     },
     "description": {
-        "short": "Create and manange your Outlook tasks.",
-        "full": "Create and manange your Outlook tasks.  Sign in using your Office 365 work/school account, and click Save."
+        "short": "Create and manage your Outlook tasks.",
+        "full": "Create and manage your Outlook tasks.  Sign in using your Office 365 work/school account, and click Save."
     },
     "icons": {
         "44": "todo44.png",
