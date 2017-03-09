@@ -1,26 +1,29 @@
 {
-    "$schema": "https://statics.teams.microsoft.com/sdk/v0.2/manifest/MicrosoftTeams.schema.json",
-    "manifestVersion": "0.2",
-    "id": "com.example.microsoftteamstabs.todoprod",
-    "version": "0.2",
-    "name": "ToDo",
-    "developer": {
+    "$schema": "https://statics.teams.microsoft.com/sdk/v0.4/manifest/MicrosoftTeams.schema.json",
+    "manifestVersion": "0.4",
+    "id": "92337fcc-ce68-4cdd-99f8-190191d3ae46",
+    "version": "0.3",
+     "developer": {
         "name": "Example company",
         "websiteUrl": "http://www.example.com",
         "privacyUrl": "http://www.example.com/privacy",
         "termsOfUseUrl": "http://www.example.com/termsofuse"
     },
-    "description": {
-        "short": "Create and manage your Outlook tasks.",
-        "full": "Create and manage your Outlook tasks.  Sign in using your Office 365 work/school account, and click Save."
-    },
-    "icons": {
-        "44": "todo44.png",
-        "88": "todo88.png"
-    },
-    "accentColor": "#004578",
-    "configUrl": "https://teams-todo-sample.azurewebsites.net/config.html",
-    "canUpdateConfig": true,
+    "tabs": [{
+        "id": "92337fcc-ce68-4cdd-99f8-190191d3ae46",
+        "name": "ToDo",
+        "description": {
+            "short": "Create and manage your Outlook tasks.",
+            "full": "Create and manage your Outlook tasks.  Sign in using your Office 365 work/school account, and click Save."
+        },
+        "icons": {
+            "44": "todo44.png",
+            "88": "todo88.png"
+        },
+        "accentColor": "#004578",
+        "configUrl": "https://teams-todo-sample.azurewebsites.net/config.html",
+        "canUpdateConfig": true
+    }],
     "needsIdentity": true,
     "validDomains": [
         "*.login.microsoftonline.com"
