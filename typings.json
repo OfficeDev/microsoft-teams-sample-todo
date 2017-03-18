@@ -4,8 +4,6 @@
     "jquery": "registry:dt/jquery#1.10.0+20170104155652",
     "office-js": "registry:dt/office-js#0.0.0+20161213215240",
     "react": "registry:dt/react#0.14.0+20161008064207",
-    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
-    "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20161004182750",
-    "whatwg-streams": "registry:dt/whatwg-streams#0.0.0+20160829180742"
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
   }
 }
