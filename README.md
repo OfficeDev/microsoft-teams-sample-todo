@@ -1,4 +1,5 @@
 # Microsoft Teams 'Todo List' sample tab app
+[![Build Status](https://travis-ci.org/OfficeDev/microsoft-teams-sample-todo.svg?branch=master)](https://travis-ci.org/OfficeDev/microsoft-teams-sample-todo)
 
 This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform).  The point of this sample to illustrate how simple it is to convert an existing web app into a Microsoft Teams tab app.  The existing web app, [**TodoMVC for React**](https://github.com/tastejs/todomvc/tree/gh-pages/examples/typescript-react), provides a basic task manager which integrates with your personal Outlook Tasks. With only a few minor modifications, this web view can be added to a channel as a tab app.  Take a look at the [code diff between the 'before' and 'after' branches](https://github.com/OfficeDev/microsoft-teams-sample-todo/compare/before...after) to see what changes were made.
 
