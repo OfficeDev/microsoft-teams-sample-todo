@@ -90,6 +90,7 @@ function deployBuild(url, folder) {
         log('Pushing ' + folder + ' to ' + URL + '... Please wait...');
         result = shell.exec('git push ' + url + ' -q -f -u HEAD:refs/heads/master', { silent: true });
         if (result.code !== 0) {
+            console.error(result.stderr.replace(url, ''));            
             exit('An error occurred while deploying ' + folder + ' to ' + URL + '...', true);
         }
         const end = Date.now();
