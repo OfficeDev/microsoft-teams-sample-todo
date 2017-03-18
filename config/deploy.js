@@ -3,10 +3,7 @@
 let path = require('path');
 let chalk = require('chalk');
 let _ = require('lodash');
-let { build, config } = require('./env.config');
 let shell = require('shelljs');
-let webpackConfig = require('./webpack.prod');
-let webpack = require('webpack');
 let { TRAVIS, TRAVIS_BRANCH, TRAVIS_PULL_REQUEST, TRAVIS_COMMIT_MESSAGE, AZURE_WA_USERNAME, AZURE_WA_SITE, AZURE_WA_PASSWORD } = process.env;
 process.env.NODE_ENV = process.env.ENV = 'production';
 
@@ -30,7 +27,6 @@ switch (slot) {
         break;
 
     default:
-        buildConfig = null;
         exit('No deployment configuration found for ' + slot + '. Skipping deploy.');
 }
 
