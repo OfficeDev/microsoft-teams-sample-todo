@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+module.exports = (production) => ({
     entry: {
         'app': './src/app.tsx',
         'config': './src/config.tsx',
@@ -48,15 +48,21 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'React • TodoMVC',
             filename: 'index.html',
-            template: path.resolve('index.html'),
-            chunks: ['app', 'vendor']
+            template: path.resolve('index.ejs'),
+            chunks: ['app', 'vendor'],
+            environment: {
+                production
+            }
         }),
 
         new HtmlWebpackPlugin({
             title: 'Config • TodoMVC',
             filename: 'config.html',
-            template: path.resolve('config.html'),
-            chunks: ['config', 'vendor']
+            template: path.resolve('config.ejs'),
+            chunks: ['config', 'vendor'],
+            environment: {
+                production
+            }
         }),
 
         new ExtractTextPlugin('[name].css'),
@@ -65,4 +71,4 @@ module.exports = {
             Router: 'director'
         })
     ]
-};
+});

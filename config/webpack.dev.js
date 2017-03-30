@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 var commonConfig = require('./webpack.common.js');
 
-module.exports = webpackMerge(commonConfig, {
+module.exports = webpackMerge(commonConfig(), {
     output: {
         path: path.resolve('dist'),
         filename: '[name].[hash].js',

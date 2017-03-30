@@ -6,7 +6,7 @@ var commonConfig = require('./webpack.common.js');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
-module.exports = webpackMerge(commonConfig, {
+module.exports = webpackMerge(commonConfig(ENV), {
     devtool: 'source-map',
 
     externals: {
@@ -28,7 +28,7 @@ module.exports = webpackMerge(commonConfig, {
         new ExtractTextPlugin('[name].css'),
         new webpack.DefinePlugin({
             'process.env': {
-                'ENV': JSON.stringify(ENV)
+                'NODE_ENV': JSON.stringify(ENV)
             }
         })
     ]
