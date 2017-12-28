@@ -146,6 +146,8 @@ This project is based on the TodoMVC Typescript - React template located [here](
 
 Please read [Contributing](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/officedev/microsoft-teams-sample-todo/tags).
