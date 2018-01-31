@@ -1,0 +1,19 @@
+### YamlMime:Sample
+sample:
+- name: Microsoft Teams 'Todo List' sample tab app
+  path: ''
+  description: Sample that shows how to adapt an existing web app into a tab app for Microsoft Teams
+  readme: ''
+  generateZip: FALSE
+  isLive: TRUE
+  technologies: []
+  azureDeploy: ''
+  author: WrathOfZombies
+  platforms: []
+  languages:
+  - node.js
+  extensions:
+    products:
+    - Microsoft Teams
+    - Outlook
+    scenarios: []
