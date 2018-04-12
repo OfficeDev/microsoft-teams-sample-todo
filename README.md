@@ -34,7 +34,7 @@ Optionally, to build a deployable app, which you can host in your own environmen
 
 ### Add the tab to Microsoft Teams
 
-1. Download the [tab app dev package](https://github.com/OfficeDev/microsoft-teams-sample-todo/raw/before-final/package/todo.dev.zip) zip file for this sample.
+1. Download the [tab app dev package](https://github.com/OfficeDev/microsoft-teams-sample-todo/tree/master/package/todo.dev.zip) zip file for this sample.
 2. Create a new team for testing, if necessary. Click **Create team** at the bottom of the left-hand panel.
 3. Select the team from the left-hand panel, select **... (more options)** and then select **View Team**.
 4. Select the **Developer (Preview)** tab, and then select **Upload**.
