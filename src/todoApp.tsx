@@ -28,22 +28,22 @@ export class TodoApp extends React.Component<IAppProps, IAppState> {
         router.init('/');
     }
 
-    public handleNewTodoKeyDown(event: React.KeyboardEvent) {
+    public handleNewTodoKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.keyCode !== ENTER_KEY) {
             return;
         }
 
         event.preventDefault();
 
-        var val = ReactDOM.findDOMNode<HTMLInputElement>(this.refs["newField"]).value.trim();
+        var val = (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value.trim();
 
         if (val) {
             this.props.model.addTodo(val);
-            ReactDOM.findDOMNode<HTMLInputElement>(this.refs["newField"]).value = '';
+            (ReactDOM.findDOMNode(this.refs["newField"]) as HTMLInputElement).value = '';
         }
     }
 
-    public toggleAll(event: React.FormEvent) {
+    public toggleAll(event: React.FormEvent<HTMLInputElement>) {
         var target: any = event.target;
         var checked = target.checked;
         this.props.model.toggleAll(checked);

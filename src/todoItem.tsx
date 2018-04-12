@@ -12,7 +12,7 @@ export class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
         this.state = { editText: this.props.todo.title };
     }
 
-    public handleSubmit(event: React.FormEvent) {
+    public handleSubmit(event: React.FormEvent<HTMLInputElement>) {
         var val = this.state.editText.trim();
         if (val) {
             this.props.onSave(val);
@@ -27,7 +27,7 @@ export class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
         this.setState({ editText: this.props.todo.title });
     }
 
-    public handleKeyDown(event: React.KeyboardEvent) {
+    public handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.keyCode === ESCAPE_KEY) {
             this.setState({ editText: this.props.todo.title });
             this.props.onCancel(event);
@@ -36,7 +36,7 @@ export class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
         }
     }
 
-    public handleChange(event: React.FormEvent) {
+    public handleChange(event: React.FormEvent<HTMLInputElement>) {
         var input: any = event.target;
         this.setState({ editText: input.value });
     }
@@ -64,7 +64,7 @@ export class TodoItem extends React.Component<ITodoItemProps, ITodoItemState> {
      */
     public componentDidUpdate(prevProps: ITodoItemProps) {
         if (!prevProps.editing && this.props.editing) {
-            var node = ReactDOM.findDOMNode<HTMLInputElement>(this.refs["editField"]);
+            var node = ReactDOM.findDOMNode(this.refs["editField"]) as HTMLInputElement;
             node.focus();
             node.setSelectionRange(node.value.length, node.value.length);
         }
