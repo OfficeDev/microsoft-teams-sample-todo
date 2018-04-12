@@ -16,8 +16,7 @@
   "scripts": {
     "build": "rimraf dist && webpack --config config/webpack.prod.js --colors --display-modules --progress",
     "start": "webpack-dev-server --port 3000 --config config/webpack.dev.js --colors --display-modules --progress --open --inline",
-    "deploy": "node config/deploy.js",
-    "postinstall": "typings install"
+    "deploy": "node config/deploy.js"
   },
   "dependencies": {
     "@microsoft/microsoft-teams-library-js": "1.2.1-beta.2",
