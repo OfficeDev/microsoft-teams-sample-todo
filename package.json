@@ -41,14 +41,19 @@
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.3",
+    "@types/jquery": "^3.3.1",
+    "@types/node": "^9.6.4",
+    "@types/office-js": "0.0.54",
+    "@types/react": "^16.3.9",
+    "@types/react-dom": "^16.0.5",
     "css-loader": "^0.25.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
     "rimraf": "^2.5.4",
     "source-map-loader": "^0.1.5",
     "ts-loader": "^0.9.5",
-    "typescript": "^2.0.3",
-    "typings": "^1.4.0",
+    "typescript": "^2.8.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2",
     "webpack-merge": "^0.15.0"
