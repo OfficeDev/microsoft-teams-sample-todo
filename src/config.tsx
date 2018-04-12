@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Utilities } from '@microsoft/office-js-helpers';
+import * as microsoftTeams from '@microsoft/microsoft-teams-library-js';
 
 interface IConfigState {
     groupId: string;
@@ -82,6 +83,7 @@ class Config extends React.Component<any, any> {
         microsoftTeams.settings.registerOnSaveHandler(saveEvent => {
             /** Store Tab content settings */
             microsoftTeams.settings.setSettings({
+                entityId:"Microsoft_todo_sample_app",
                 contentUrl: `${location.origin}/index.html`,
                 suggestedDisplayName: "My Tasks",
                 websiteUrl: `${location.origin}/index.html`

@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { TodoApp } from './todoApp';
 import { TodoModel } from './core';
 import { Authenticator } from '@microsoft/office-js-helpers';
+import * as microsoftTeams from '@microsoft/microsoft-teams-library-js';
 
 var model = new TodoModel('react-todos');
 
