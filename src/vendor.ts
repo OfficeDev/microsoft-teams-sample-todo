@@ -10,3 +10,5 @@ import 'todomvc-common/base.js';
 import 'office-ui-fabric-core/dist/css/fabric.min.css';
 import 'office-ui-fabric-js/dist/css/fabric.components.min.css';
 import './app.css';
+
+import '@microsoft/microsoft-teams-library-js';
