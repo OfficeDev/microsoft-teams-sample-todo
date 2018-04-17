@@ -19,7 +19,7 @@
     "deploy": "node config/deploy.js"
   },
   "dependencies": {
-    "@microsoft/microsoft-teams-library-js": "1.2.1-beta.2",
+    "@microsoft/teams-js": "1.2.6",
     "@microsoft/office-js-helpers": "^1.0.2",
     "chalk": "1.1.3",
     "classnames": "^2.2.5",

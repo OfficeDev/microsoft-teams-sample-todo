@@ -2,10 +2,6 @@
 # yarn lockfile v1
 
 
-"@microsoft/microsoft-teams-library-js@1.2.1-beta.2":
-  version "1.2.1-beta.2"
-  resolved "https://registry.yarnpkg.com/@microsoft/microsoft-teams-library-js/-/microsoft-teams-library-js-1.2.1-beta.2.tgz#6da15e54265aff6883774de1e171daae3f07273d"
-
 "@microsoft/office-js-helpers@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@microsoft/office-js-helpers/-/office-js-helpers-1.0.2.tgz#040203d909deaa7f95d53927437ea28036d3733b"
@@ -15,6 +11,10 @@
     core-js "^2.5.3"
     lodash-es "^4.17.5"
     rxjs "^5.5.6"
+
+"@microsoft/teams-js@1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@microsoft/teams-js/-/teams-js-1.2.6.tgz#5091eabbe101a63c4184d257e1dcff6020dd2482"
 
 "@types/classnames@^2.2.3":
   version "2.2.3"
