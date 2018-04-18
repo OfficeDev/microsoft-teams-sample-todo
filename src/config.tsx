@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Utilities } from '@microsoft/office-js-helpers';
-import * as microsoftTeams from '@microsoft/microsoft-teams-library-js';
+import * as microsoftTeams from '@microsoft/teams-js';
 
 interface IConfigState {
     groupId: string;

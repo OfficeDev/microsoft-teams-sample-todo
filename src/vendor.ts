@@ -11,4 +11,4 @@ import 'office-ui-fabric-core/dist/css/fabric.min.css';
 import 'office-ui-fabric-js/dist/css/fabric.components.min.css';
 import './app.css';
 
-import '@microsoft/microsoft-teams-library-js';
+import '@microsoft/teams-js';
