@@ -1,3 +1,18 @@
+---
+topic: sample
+products:
+- Microsoft Teams
+- Outlook
+- Office 365
+languages:
+- TypeScript
+- node.js
+extensions:
+  contentType: samples
+  technologies:
+  - Tabs
+  createdDate: 10/19/2016 12:06:51 PM
+---
 # Microsoft Teams 'Todo List' sample tab app
 [![Build Status](https://travis-ci.org/OfficeDev/microsoft-teams-sample-todo.svg?branch=master)](https://travis-ci.org/OfficeDev/microsoft-teams-sample-todo)
 
