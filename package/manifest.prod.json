@@ -1,5 +1,5 @@
 {
-    "$schema": "https://statics.teams.microsoft.com/sdk/v0.4/manifest/MicrosoftTeams.schema.json",
+    "$schema": "https://statics.teams.cdn.office.net/sdk/v1.5.2/manifest/MicrosoftTeams.schema.json",
     "manifestVersion": "0.4",
     "id": "92337fcc-ce68-4cdd-99f8-190191d3ae46",
     "version": "0.3",
