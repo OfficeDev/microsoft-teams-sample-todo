@@ -1,5 +1,6 @@
 ---
 page_type: sample
+description: "This is an example [tab app for Microsoft Teams](https://aka.ms/microsoftteamstabsplatform)."
 products:
 - office-teams
 - office-outlook
